@@ -1,6 +1,10 @@
-# Getting Started with Create React App
+# Cozy Study App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A basic react pomodoro app
+Includes:
+- Music for studying
+- Different backgrounds to choose from
+- Similar to Study with Abao
 
 ## Available Scripts
 
