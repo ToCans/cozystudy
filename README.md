@@ -2,9 +2,14 @@
 
 A basic react pomodoro app
 Includes:
-- Music for studying
-- Different backgrounds to choose from
-- Similar to Study with Abao
+
+-   Music for studying
+-   Different backgrounds to choose from
+-   Similar to Study with Abao
+
+---
+
+## React Commands:
 
 ## Available Scripts
 
