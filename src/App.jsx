@@ -1,6 +1,8 @@
 import "./index.css";
+import completeSound from "./assets/complete.mp3"
+import lowHighChimeSound from "./assets/lowHighChime.mp3"
 import TimeDisplay from "./components/timeDisplay";
-import InteractiveButton from "./components/button";
+import InteractiveButton from "./components/timeButton";
 
 import { useState, useEffect } from "react";
 
@@ -22,6 +24,14 @@ function App() {
 			}
 			// When the timer fully reaches zero
 			else {
+				// lowHighChime played for breaks finishing
+				if (cycleNumber % 2 === 0) {
+					new Audio(lowHighChimeSound).play()
+				}
+				// complete played for work finishing
+				else{
+					new Audio(completeSound).play()
+				}
 				setCycleNumber(cycleNumber + 1);
 				setTimerState(false);
 			}
@@ -48,19 +58,19 @@ function App() {
 		console.log("Here's the current cycle number",cycleNumber)
 		// Long Break Handling
 		if (cycleNumber % 8 === 0) {
-			setSeconds(0);
-			setMinutes(15);
+			setSeconds(15);
+			setMinutes(0);
 		}
 		// Short Break Handling
 		else if (cycleNumber % 2 === 0) {
-			setSeconds(0);
-			setMinutes(5);
+			setSeconds(5);
+			setMinutes(0);
 		}
 
 		// Normal Study Time Check
 		else {
-			setSeconds(0);
-			setMinutes(25);
+			setSeconds(25);
+			setMinutes(0);
 		}
 	}, [cycleNumber]);
 
