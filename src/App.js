@@ -8,44 +8,70 @@ function App() {
 	// Different State Handling
 	const [timerRunning, setTimerState] = useState(false);
 	const [cycleNumber, setCycleNumber] = useState(1);
-	const [breakState, setBreakState] = useState("none");
-	const [prevOnBreak, setPrevOnBreak] = useState(null);
 	const [minutes, setMinutes] = useState(0);
 	const [seconds, setSeconds] = useState(30);
 
 	//function breakSettingHelper(cycleNumber,)
+	const decrementTime = (cycleNumber, setTimerState, setCycleNumber) => {
+		// In the case that Seconds reaches Zero
+		if (seconds === 0) {
+			// In the case that minutes aren't but seconds are zero
+			if (minutes !== 0) {
+				setSeconds(59);
+				setMinutes(minutes - 1);
+			}
+			// When the timer fully reaches zero
+			else {
+				setCycleNumber(cycleNumber + 1);
+				setTimerState(false);
+			}
+		}
+		// Timer decreases seconds by one
+		else {
+			setSeconds(seconds - 1);
+		}
+	};
+
+	// Running Timer
+	useEffect(() => {
+		if (timerRunning === true) {
+			const interval = setInterval(
+				() => decrementTime(cycleNumber, setTimerState, setCycleNumber),
+				1000
+			);
+			return () => clearInterval(interval);
+		}
+	});
 
 	// Break Handling based on Break State
 	useEffect(() => {
+		console.log("Here's the current cycle number",cycleNumber)
 		// Long Break Handling
-		if (breakState === "long") {
-			setSeconds(20);
-			setMinutes(0);
+		if (cycleNumber % 8 === 0) {
+			setSeconds(0);
+			setMinutes(15);
 		}
 		// Short Break Handling
-		else if (breakState === "short") {
-			setSeconds(10);
-			setMinutes(0);
+		else if (cycleNumber % 2 === 0) {
+			setSeconds(0);
+			setMinutes(5);
 		}
 
 		// Normal Study Time Check
 		else {
-			setSeconds(30);
-			setMinutes(0);
+			setSeconds(0);
+			setMinutes(25);
 		}
-	}, [onBreak]);
+	}, [cycleNumber]);
+
+	// Timer Display Information
+	let cycleDisplay = Math.ceil(cycleNumber / 2)
 
 	return (
 		<div className="app">
 			<TimeDisplay
-				timerStatus={timerRunning}
 				minutes={minutes}
 				seconds={seconds}
-				onBreakState={onBreak}
-				timerStateChanger={setTimerState}
-				minuteChanger={setMinutes}
-				secondChanger={setSeconds}
-				onBreakChanger={setOnBreak}
 			/>
 			<div className="timeButtonRow">
 				<InteractiveButton
@@ -53,25 +79,21 @@ function App() {
 					cycleState={cycleNumber}
 					timerStateChanger={setTimerState}
 					cycleStateChanger={setCycleNumber}
-					onBreakChanger={setOnBreak}
 				/>
 				<InteractiveButton
 					purpose="Pause"
 					cycleState={cycleNumber}
 					timerStateChanger={setTimerState}
 					cycleStateChanger={setCycleNumber}
-					onBreakChanger={setOnBreak}
 				/>
 				<InteractiveButton
 					purpose="Skip"
 					cycleState={cycleNumber}
 					timerStateChanger={setTimerState}
 					cycleStateChanger={setCycleNumber}
-					onBreakChanger={setOnBreak}
 				/>
 			</div>
-			<p>Current Cycle: {cycleNumber}</p>
-			<p>Break Status: {onBreak.toString()}</p>
+			<p>Current Cycle: {cycleDisplay}</p>
 		</div>
 	);
 }
