@@ -2,11 +2,13 @@ const InteractiveButton = ({
 	purpose,
 	cycleState,
 	timerStateChanger,
-	cycleStateChanger,
+	cycleStateChanger
 }) => {
 	// Start Button Handling
 	if (purpose === "Start") {
-		return <button onClick={() => timerStateChanger(true)}>Start</button>;
+		return <button onClick={() => {
+			timerStateChanger(true);
+		}}>Start</button>;
 	}
 	// Pause Button Handling
 	else if (purpose === "Pause") {
@@ -18,7 +20,7 @@ const InteractiveButton = ({
 			<button
 				onClick={() => {
 					timerStateChanger(false);
-					cycleStateChanger(cycleState + 1)
+					cycleStateChanger(cycleState + 1);
 				}}
 			>
 				Skip
