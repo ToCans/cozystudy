@@ -11,6 +11,7 @@ import { useState, useEffect, useContext } from "react";
 function Timer() {
     // Setting Context used
     const settings = useContext(SettingsContent);
+
     // Different State Handling
     const [timerRunning, setTimerState] = useState(false);
     const [minutesRemaining, setMinutesRemaining] = useState(
@@ -22,6 +23,14 @@ function Timer() {
     const [progressBarValue, setProgressBarValue] = useState(0);
     const [progressBarTotal, setProgressBarTotal] = useState(
         settings.workingMinutes * 60 + settings.workingSeconds
+    );
+
+    // Audio Used
+    const workFinishAudio = new Audio(
+        "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/complete.mp3?raw=true"
+    );
+    const breakFinishAudio = new Audio(
+        "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/lowHighChime.mp3?raw=true"
     );
 
     // Used to Decrement the time
@@ -101,18 +110,12 @@ function Timer() {
         ) {
             // lowHighChime played for breaks finishing
             if (settings.cycleNumber % 2 === 0) {
-                const breakFinishAudio = new Audio(
-                    "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/lowHighChime.mp3?raw=true"
-                );
-                //breakFinishAudio.volume = 0.5;
+                breakFinishAudio.volume = 0.5;
                 breakFinishAudio.play();
             }
             // Complete played for work finishing
             else {
-                const workFinishAudio = new Audio(
-                    "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/complete.mp3?raw=true"
-                );
-                //workFinishAudio.volume = 0.5;
+                workFinishAudio.volume = 0.5;
                 workFinishAudio.play();
             }
         }
