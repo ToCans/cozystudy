@@ -1,39 +1,62 @@
 body {
-	margin: 0;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
-		"Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-	-webkit-font-smoothing: antialiased;
-	-moz-osx-font-smoothing: grayscale;
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+        "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+        "Helvetica Neue", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-	font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+        monospace;
 }
 
 .app * {
-	margin: 0;
-	padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .app {
-	background-color: #282c34;
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	color: white;
+    align-items: center;
+    background-color: #282c34;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+.mainContainer {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 50vw;
+    min-height: 50vh;
+}
+
+.settingsContainer {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.settingsRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.settingsRow * {
+    margin: 3px;
+    padding: 3px;
 }
 
 .timeDisplayContainer {
-	font-size: 8vw;
-}
-
-.startButton {
-	background-color: honeydew;
+    font-size: 8vw;
 }
 
 .timeButtonRow * {
-	margin: 3px;
-	padding: 1px 3px 1px 3px;
+    margin: 3px;
+    padding: 1px 3px 1px 3px;
 }

@@ -1,120 +1,154 @@
 import "../index.css";
-import completeSound from "../assets/sounds/complete.mp3"
-import lowHighChimeSound from "../assets/sounds/lowHighChime.mp3"
+import completeSound from "../assets/sounds/complete.mp3";
+import lowHighChimeSound from "../assets/sounds/lowHighChime.mp3";
 import TimeDisplay from "./timeDisplay";
 import InteractiveButton from "./timeButton";
+import ProgressBarTest from "./progressBar";
+import SettingsContent from "./settingsContent";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 function Timer() {
-	// Different State Handling
-	const [timerRunning, setTimerState] = useState(false);
-	const [cycleNumber, setCycleNumber] = useState(1);
-	const [minutes, setMinutes] = useState(25);
-	const [seconds, setSeconds] = useState(0);
+    // Setting Context used
+    const settings = useContext(SettingsContent);
+    // Different State Handling
+    const [timerRunning, setTimerState] = useState(false);
+    const [minutesRemaining, setMinutesRemaining] = useState(
+        settings.workingMinutes
+    );
+    const [secondsRemaining, setSecondsRemaining] = useState(
+        settings.workingSeconds
+    );
+    const [progressBarValue, setProgressBarValue] = useState(0);
+    const [progressBarTotal, setProgressBarTotal] = useState(
+        settings.workingMinutes * 60 + settings.workingSeconds
+    );
 
-	//function breakSettingHelper(cycleNumber,)
-	const decrementTime = (cycleNumber, setTimerState, setCycleNumber) => {
-        if (minutes === 0 && seconds === 0) { 
+    // Used to Decrement the time
+    const decrementTime = (cycleNumber, setTimerState, setCycleNumber) => {
+        if (minutesRemaining === 0 && secondsRemaining === 0) {
             setTimerState(false);
             setCycleNumber(cycleNumber + 1);
         }
-		// In the case that Seconds reaches Zero
-		else if (minutes !== 0 && seconds === 0) {
-            setSeconds(59);
-            setMinutes(minutes - 1);
-		}
-		// Timer decreases seconds by one
-		else {
-			setSeconds(seconds - 1);
-		}
-     
-	};
+        // In the case that secondsRemaining reaches Zero
+        else if (minutesRemaining !== 0 && secondsRemaining === 0) {
+            setSecondsRemaining(59);
+            setMinutesRemaining(minutesRemaining - 1);
+        }
+        // Timer decreases secondsRemaining by one
+        else {
+            setSecondsRemaining(secondsRemaining - 1);
+        }
+    };
 
-	// Running Timer
-	useEffect(() => {
-		if (timerRunning === true) {
-			const interval = setInterval(
-				() => {
-                    decrementTime(cycleNumber, setTimerState, setCycleNumber)
-                },
-				1000
-			);
-			return () => clearInterval(interval);
-		}
-	});
+    // Running Timer and Progress Bar
+    useEffect(() => {
+        if (timerRunning === true) {
+            const interval = setInterval(() => {
+                decrementTime(
+                    settings.cycleNumber,
+                    setTimerState,
+                    settings.setCycleNumber
+                );
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    });
 
+    useEffect(() => {
+        let progressBarValue =
+            (1 -
+                (minutesRemaining * 60 + secondsRemaining) / progressBarTotal) *
+            100;
+        setProgressBarValue(progressBarValue);
+    }, [progressBarTotal, minutesRemaining, secondsRemaining]);
 
-	// Break Handling based on Break State
-	useEffect(() => {
-		// Long Break Handling
-		if (cycleNumber % 8 === 0) {
-			setSeconds(0);
-			setMinutes(15);
-		}
-		// Short Break Handling
-		else if (cycleNumber % 2 === 0) {
-			setSeconds(0);
-			setMinutes(5);
-		}
-
-		// Normal Study Time Check
-		else {
-			setSeconds(0);
-			setMinutes(25);
-		}
-	}, [cycleNumber]);
+    // Break Handling based on Break State
+    useEffect(() => {
+        // Long Break Handling
+        if (settings.cycleNumber % 8 === 0) {
+            setSecondsRemaining(settings.longBreakSeconds);
+            setMinutesRemaining(settings.longBreakMinutes);
+            setProgressBarTotal(
+                settings.longBreakMinutes * 60 + settings.longBreakSeconds
+            );
+        }
+        // Short Break Handling
+        else if (settings.cycleNumber % 2 === 0) {
+            setSecondsRemaining(settings.shortBreakSeconds);
+            setMinutesRemaining(settings.shortBreakMinutes);
+            setProgressBarTotal(
+                settings.shortBreakMinutes * 60 + settings.shortBreakSeconds
+            );
+        }
+        // Normal Study Time Check
+        else {
+            setSecondsRemaining(settings.workingSeconds);
+            setMinutesRemaining(settings.workingMinutes);
+            setProgressBarTotal(
+                settings.workingMinutes * 60 + settings.workingSeconds
+            );
+        }
+        setProgressBarValue(0);
+    }, [settings]);
 
     // End of Cycle Sound Handling
-    useEffect(() => { 
-        if (minutes === 0 && seconds === 0 && timerRunning === true) {
-            if (cycleNumber % 2 === 0) {
-                // lowHighChime played for breaks finishing
-                new Audio(lowHighChimeSound).play()
+    useEffect(() => {
+        if (
+            minutesRemaining === 0 &&
+            secondsRemaining === 0 &&
+            timerRunning === true
+        ) {
+            // lowHighChime played for breaks finishing
+            if (settings.cycleNumber % 2 === 0) {
+                const breakFinishAudio = new Audio(lowHighChimeSound);
+                breakFinishAudio.volume = 0.5;
+                breakFinishAudio.play();
             }
-            // complete played for work finishing
-            else{
-                new Audio(completeSound).play()
+            // Complete played for work finishing
+            else {
+                const workFinishAudio = new Audio(completeSound);
+                workFinishAudio.volume = 0.5;
+                workFinishAudio.play();
             }
         }
-		
-	});
+    });
 
+    // Timer Display Information
+    let cycleDisplay = Math.ceil(settings.cycleNumber / 2);
 
-	// Timer Display Information
-	let cycleDisplay = Math.ceil(cycleNumber / 2)
-
-	return (
-		<div>
-			<TimeDisplay
-				minutes={minutes}
-				seconds={seconds}
-			/>
-			<div className="timeButtonRow">
-				<InteractiveButton
-					purpose="Start"
-					cycleState={cycleNumber}
-					timerStateChanger={setTimerState}
-					cycleStateChanger={setCycleNumber}
-
-				/>
-				<InteractiveButton
-					purpose="Pause"
-					cycleState={cycleNumber}
-					timerStateChanger={setTimerState}
-					cycleStateChanger={setCycleNumber}
-
-				/>
-				<InteractiveButton
-					purpose="Skip"
-					cycleState={cycleNumber}
-					timerStateChanger={setTimerState}
-					cycleStateChanger={setCycleNumber}
-				/>
-			</div>
-			<p>Current Cycle: {cycleDisplay}</p>
-		</div>
-	);
+    return (
+        <div>
+            <TimeDisplay
+                minutes={minutesRemaining}
+                seconds={secondsRemaining}
+            />
+            <ProgressBarTest
+                progressBarValue={progressBarValue}
+            ></ProgressBarTest>
+            <div className="timeButtonRow">
+                <InteractiveButton
+                    purpose="Start"
+                    cycleState={settings.cycleNumber}
+                    timerStateChanger={setTimerState}
+                    cycleStateChanger={settings.setCycleNumber}
+                />
+                <InteractiveButton
+                    purpose="Pause"
+                    cycleState={settings.cycleNumber}
+                    timerStateChanger={setTimerState}
+                    cycleStateChanger={settings.setCycleNumber}
+                />
+                <InteractiveButton
+                    purpose="Skip"
+                    cycleState={settings.cycleNumber}
+                    timerStateChanger={setTimerState}
+                    cycleStateChanger={settings.setCycleNumber}
+                />
+            </div>
+            <p>Current Cycle: {cycleDisplay}</p>
+        </div>
+    );
 }
 
 export default Timer;
