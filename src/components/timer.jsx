@@ -104,7 +104,7 @@ function Timer() {
                 const breakFinishAudio = new Audio(
                     "https://github.com/ToCans/cozystudy/blob/main/src/assets/lowHighChime.mp3?raw=true"
                 );
-                breakFinishAudio.volume = 0.5;
+                //breakFinishAudio.volume = 0.5;
                 breakFinishAudio.play();
             }
             // Complete played for work finishing
@@ -112,7 +112,7 @@ function Timer() {
                 const workFinishAudio = new Audio(
                     "https://github.com/ToCans/cozystudy/blob/main/src/assets/complete.mp3?raw=true"
                 );
-                workFinishAudio.volume = 0.5;
+                //workFinishAudio.volume = 0.5;
                 workFinishAudio.play();
             }
         }

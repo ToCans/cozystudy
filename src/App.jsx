@@ -11,12 +11,12 @@ function App() {
     const [showSettings, setShowSettings] = useState(false);
 
     const [cycleNumber, setCycleNumber] = useState(1);
-    const [workingMinutes, setWorkingMinutes] = useState(25);
-    const [workingSeconds, setWorkingSeconds] = useState(0);
-    const [shortBreakMinutes, setShortBreakMinutes] = useState(5);
-    const [shortBreakSeconds, setShortBreakSeconds] = useState(0);
-    const [longBreakMinutes, setLongBreakMinutes] = useState(15);
-    const [longBreakSeconds, setLongBreakSeconds] = useState(0);
+    const [workingMinutes, setWorkingMinutes] = useState(0);
+    const [workingSeconds, setWorkingSeconds] = useState(25);
+    const [shortBreakMinutes, setShortBreakMinutes] = useState(0);
+    const [shortBreakSeconds, setShortBreakSeconds] = useState(5);
+    const [longBreakMinutes, setLongBreakMinutes] = useState(0);
+    const [longBreakSeconds, setLongBreakSeconds] = useState(15);
 
     const settingsToggle = () => {
         setShowSettings(!showSettings);
