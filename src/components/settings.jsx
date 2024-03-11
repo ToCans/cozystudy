@@ -11,15 +11,15 @@ const Settings = () => {
             <div className="settingsRow">
                 <button
                     onClick={() =>
-                        settings.setWorkingSeconds(settings.workingSeconds - 1)
+                        settings.setWorkingMinutes(settings.workingMinutes - 1)
                     }
                 >
                     -
                 </button>
-                <p>Here are the Working seconds: {settings.workingSeconds}</p>
+                <p>Here are the Working minutes: {settings.workingMinutes}</p>
                 <button
                     onClick={() =>
-                        settings.setWorkingSeconds(settings.workingSeconds + 1)
+                        settings.setWorkingMinutes(settings.workingMinutes + 1)
                     }
                 >
                     +
@@ -28,21 +28,21 @@ const Settings = () => {
             <div className="settingsRow">
                 <button
                     onClick={() =>
-                        settings.setShortBreakSeconds(
-                            settings.shortBreakSeconds - 1
+                        settings.setShortBreakMinutes(
+                            settings.shortBreakMinutes - 1
                         )
                     }
                 >
                     -
                 </button>
                 <p>
-                    Here are the Short Break seconds:{" "}
-                    {settings.shortBreakSeconds}
+                    Here are the Short Break minutes:{" "}
+                    {settings.shortBreakMinutes}
                 </p>
                 <button
                     onClick={() =>
-                        settings.setShortBreakSeconds(
-                            settings.shortBreakSeconds + 1
+                        settings.setShortBreakMinutes(
+                            settings.shortBreakMinutes + 1
                         )
                     }
                 >
@@ -52,20 +52,20 @@ const Settings = () => {
             <div className="settingsRow">
                 <button
                     onClick={() =>
-                        settings.setLongBreakSeconds(
-                            settings.longBreakSeconds - 1
+                        settings.setLongBreakMinutes(
+                            settings.longBreakMinutes - 1
                         )
                     }
                 >
                     -
                 </button>
                 <p>
-                    Here are the Long Break seconds: {settings.longBreakSeconds}
+                    Here are the Long Break minutes: {settings.longBreakMinutes}
                 </p>
                 <button
                     onClick={() =>
-                        settings.setLongBreakSeconds(
-                            settings.longBreakSeconds + 1
+                        settings.setLongBreakMinutes(
+                            settings.longBreakMinutes + 1
                         )
                     }
                 >
