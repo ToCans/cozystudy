@@ -102,7 +102,7 @@ function Timer() {
             // lowHighChime played for breaks finishing
             if (settings.cycleNumber % 2 === 0) {
                 const breakFinishAudio = new Audio(
-                    "https://github.com/ToCans/cozystudy/blob/main/src/assets/lowHighChime.mp3?raw=true"
+                    "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/lowHighChime.mp3?raw=true"
                 );
                 //breakFinishAudio.volume = 0.5;
                 breakFinishAudio.play();
@@ -110,7 +110,7 @@ function Timer() {
             // Complete played for work finishing
             else {
                 const workFinishAudio = new Audio(
-                    "https://github.com/ToCans/cozystudy/blob/main/src/assets/complete.mp3?raw=true"
+                    "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/complete.mp3?raw=true"
                 );
                 //workFinishAudio.volume = 0.5;
                 workFinishAudio.play();
