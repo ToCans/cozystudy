@@ -1,6 +1,6 @@
 import "../index.css";
-import completeSound from "../assets/sounds/complete.mp3";
-import lowHighChimeSound from "../assets/sounds/lowHighChime.mp3";
+//import completeSound from "https://github.com/ToCans/cozystudy/blob/main/src/assets/complete.mp3?raw=true";
+//import lowHighChimeSound from "https://github.com/ToCans/cozystudy/blob/main/src/assets/lowHighChime.mp3?raw=true";
 import TimeDisplay from "./timeDisplay";
 import InteractiveButton from "./timeButton";
 import ProgressBarTest from "./progressBar";
@@ -101,13 +101,17 @@ function Timer() {
         ) {
             // lowHighChime played for breaks finishing
             if (settings.cycleNumber % 2 === 0) {
-                const breakFinishAudio = new Audio(lowHighChimeSound);
+                const breakFinishAudio = new Audio(
+                    "https://github.com/ToCans/cozystudy/blob/main/src/assets/lowHighChime.mp3?raw=true"
+                );
                 breakFinishAudio.volume = 0.5;
                 breakFinishAudio.play();
             }
             // Complete played for work finishing
             else {
-                const workFinishAudio = new Audio(completeSound);
+                const workFinishAudio = new Audio(
+                    "https://github.com/ToCans/cozystudy/blob/main/src/assets/complete.mp3?raw=true"
+                );
                 workFinishAudio.volume = 0.5;
                 workFinishAudio.play();
             }
