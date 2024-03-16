@@ -5,6 +5,8 @@ import Timer from "./components/timer";
 import Settings from "./components/settings";
 import SettingsContent from "./components/settingsContent";
 
+//import MyComponent from "./components/myComponent";
+
 import { useState } from "react";
 
 function App() {

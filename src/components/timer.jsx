@@ -3,6 +3,7 @@ import TimeDisplay from "./timeDisplay";
 import InteractiveButton from "./timeButton";
 import ProgressBarTest from "./progressBar";
 import SettingsContent from "./settingsContent";
+import worker_script from "../scripts/worker";
 
 import { useState, useEffect, useContext } from "react";
 
@@ -22,6 +23,13 @@ function Timer() {
     const [progressBarTotal, setProgressBarTotal] = useState(
         settings.workingMinutes * 60 + settings.workingSeconds
     );
+
+    var myWorker = new Worker(worker_script);
+
+    myWorker.onmessage = (m) => {
+        console.log("msg from worker: ", m.data);
+    };
+    myWorker.postMessage("im from main");
 
     // Used to Decrement the time
     const decrementTime = (cycleNumber, setTimerState, setCycleNumber) => {
