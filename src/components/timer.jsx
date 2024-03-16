@@ -1,4 +1,4 @@
-import "../index.css";
+//import "../index.css";
 import TimeDisplay from "./timeDisplay";
 import InteractiveButton from "./timeButton";
 import ProgressBarTest from "./progressBar";
@@ -128,7 +128,7 @@ function Timer() {
     let cycleDisplay = Math.ceil(settings.cycleNumber / 2);
 
     return (
-        <div>
+        <div className="bg-slate-50">
             <TimeDisplay
                 minutes={minutesRemaining}
                 seconds={secondsRemaining}

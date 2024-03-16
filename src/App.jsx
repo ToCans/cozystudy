@@ -1,9 +1,9 @@
 import "./index.css";
-import gearIcon from "./assets/icons/gear-svgrepo-com.svg";
+import gearIcon from "./assets/icons/gear.svg";
+import questionIcon from "./assets/icons/question-circle.svg";
 import Timer from "./components/timer";
 import Settings from "./components/settings";
 import SettingsContent from "./components/settingsContent";
-import "bootstrap/dist/css/bootstrap.css";
 
 import { useState } from "react";
 
@@ -23,7 +23,7 @@ function App() {
     };
 
     return (
-        <div className="app">
+        <div className="bg-amber-100 h-screen w-screen">
             <SettingsContent.Provider
                 value={{
                     workingMinutes,
@@ -42,13 +42,23 @@ function App() {
                     setCycleNumber,
                 }}
             >
-                <div className="mainContainer">
-                    <img
-                        src={gearIcon}
-                        onClick={settingsToggle}
-                        alt="Gear Icon for Settings"
-                    />
-                    {showSettings === false ? <Timer /> : <Settings />}
+                <div className="flex flex-col">
+                    <div className="fixed top-0 w-11/12 flex flex-row justify-end">
+                        <img
+                            src={questionIcon}
+                            className="size-10 m-1"
+                            alt="Question Mark Icon for Questions"
+                        />
+                        <img
+                            src={gearIcon}
+                            className="size-10 m-1"
+                            onClick={settingsToggle}
+                            alt="Gear Icon for Settings"
+                        />
+                    </div>
+                    <div className="container flex flex-col w-1/2 h-1/2 items-center justify-center">
+                        {showSettings === false ? <Timer /> : <Settings />}
+                    </div>
                 </div>
             </SettingsContent.Provider>
         </div>

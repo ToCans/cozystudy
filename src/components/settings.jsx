@@ -1,4 +1,4 @@
-import "../index.css";
+//import "../index.css";
 import SettingsContent from "./settingsContent";
 import { useContext } from "react";
 

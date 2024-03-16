@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 body {
     margin: 0;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
@@ -12,6 +16,7 @@ code {
         monospace;
 }
 
+/*
 .app * {
     margin: 0;
     padding: 0;
@@ -60,3 +65,4 @@ code {
     margin: 3px;
     padding: 1px 3px 1px 3px;
 }
+*/
