@@ -1,7 +1,7 @@
 //import "../index.css";
 import TimeDisplay from "./timeDisplay";
 import InteractiveButton from "./timeButton";
-import ProgressBarTest from "./progressBar";
+//import ProgressBarTest from "./progressBar";
 import SettingsContent from "./settingsContent";
 import worker_script from "../scripts/worker";
 
@@ -19,49 +19,54 @@ function Timer() {
     const [secondsRemaining, setSecondsRemaining] = useState(
         settings.workingSeconds
     );
+    /*
     const [progressBarValue, setProgressBarValue] = useState(0);
     const [progressBarTotal, setProgressBarTotal] = useState(
         settings.workingMinutes * 60 + settings.workingSeconds
     );
+    */
 
-    var myWorker = new Worker(worker_script);
-
-    myWorker.onmessage = (m) => {
-        console.log("msg from worker: ", m.data);
-    };
-    myWorker.postMessage("im from main");
-
-    // Used to Decrement the time
-    const decrementTime = (cycleNumber, setTimerState, setCycleNumber) => {
-        if (minutesRemaining === 0 && secondsRemaining === 0) {
-            setTimerState(false);
-            setCycleNumber(cycleNumber + 1);
-        }
-        // In the case that secondsRemaining reaches Zero
-        else if (minutesRemaining !== 0 && secondsRemaining === 0) {
-            setSecondsRemaining(59);
-            setMinutesRemaining(minutesRemaining - 1);
-        }
-        // Timer decreases secondsRemaining by one
-        else {
-            setSecondsRemaining(secondsRemaining - 1);
-        }
-    };
+    let myWorker = new Worker(worker_script);
 
     // Running Timer and Progress Bar
+
     useEffect(() => {
         if (timerRunning === true) {
-            const interval = setInterval(() => {
-                decrementTime(
-                    settings.cycleNumber,
-                    setTimerState,
-                    settings.setCycleNumber
-                );
-            }, 1000);
-            return () => clearInterval(interval);
+            myWorker.postMessage({
+                timerRunning: true,
+                minutesRemaining: minutesRemaining,
+                secondsRemaining: secondsRemaining,
+            });
+        }
+        if (timerRunning === false) {
+            myWorker.postMessage({
+                timerRunning: false,
+                minutesRemaining: minutesRemaining,
+                secondsRemaining: secondsRemaining,
+            });
+            myWorker.terminate();
         }
     });
 
+    useEffect(() => {
+        myWorker.onmessage = (e) => {
+            let minutesRemainingDisplay = e.data.minutesRemaining;
+            let secondsRemainingDisplay = e.data.secondsRemaining;
+
+            setMinutesRemaining(minutesRemainingDisplay);
+            setSecondsRemaining(secondsRemainingDisplay);
+
+            if (
+                minutesRemainingDisplay === 0 &&
+                secondsRemainingDisplay === 0
+            ) {
+                setTimerState(false);
+                settings.setCycleNumber(settings.cycleNumber + 1);
+            }
+        };
+    });
+
+    /*
     useEffect(() => {
         let progressBarValue =
             (1 -
@@ -69,6 +74,7 @@ function Timer() {
             100;
         setProgressBarValue(progressBarValue);
     }, [progressBarTotal, minutesRemaining, secondsRemaining]);
+    */
 
     // Break Handling based on Break State
     useEffect(() => {
@@ -76,27 +82,33 @@ function Timer() {
         if (settings.cycleNumber % 8 === 0) {
             setSecondsRemaining(settings.longBreakSeconds);
             setMinutesRemaining(settings.longBreakMinutes);
+            /*
             setProgressBarTotal(
                 settings.longBreakMinutes * 60 + settings.longBreakSeconds
             );
+            */
         }
         // Short Break Handling
         else if (settings.cycleNumber % 2 === 0) {
             setSecondsRemaining(settings.shortBreakSeconds);
             setMinutesRemaining(settings.shortBreakMinutes);
+            /*
             setProgressBarTotal(
                 settings.shortBreakMinutes * 60 + settings.shortBreakSeconds
             );
+            */
         }
         // Normal Study Time Check
         else {
             setSecondsRemaining(settings.workingSeconds);
             setMinutesRemaining(settings.workingMinutes);
+            /*
             setProgressBarTotal(
                 settings.workingMinutes * 60 + settings.workingSeconds
             );
+            */
         }
-        setProgressBarValue(0);
+        //setProgressBarValue(0);
     }, [settings]);
 
     // End of Cycle Sound Handling
@@ -141,9 +153,6 @@ function Timer() {
                 minutes={minutesRemaining}
                 seconds={secondsRemaining}
             />
-            <ProgressBarTest
-                progressBarValue={progressBarValue}
-            ></ProgressBarTest>
             <div className="timeButtonRow">
                 <InteractiveButton
                     purpose="Start"

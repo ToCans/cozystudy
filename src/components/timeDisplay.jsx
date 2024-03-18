@@ -21,11 +21,9 @@ const TimeDisplay = ({ minutes, seconds }) => {
     const timer = formattingCheck(minutes, seconds);
 
     return (
-        <div className="timeDisplayContainer">
-            <h1>
-                {timer[0]}:{timer[1]}
-            </h1>
-        </div>
+        <p className="text-9xl">
+            {timer[0]}:{timer[1]}
+        </p>
     );
 };
 

@@ -58,7 +58,7 @@ function App() {
                             alt="Gear Icon for Settings"
                         />
                     </div>
-                    <div className="container flex flex-col w-1/2 h-1/2 items-center justify-center">
+                    <div>
                         {showSettings === false ? <Timer /> : <Settings />}
                     </div>
                 </div>
