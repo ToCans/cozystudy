@@ -4,43 +4,36 @@ import questionIcon from "./assets/icons/question-circle.svg";
 import Timer from "./components/timer";
 import Settings from "./components/settings";
 import SettingsContent from "./components/settingsContent";
-
-//import MyComponent from "./components/myComponent";
-
+import timerWorkerScript from "./scripts/timerWorker";
 import { useState } from "react";
 
 function App() {
     const [showSettings, setShowSettings] = useState(false);
-
+    const [showTabTimer, setTabTimer] = useState(false);
     const [cycleNumber, setCycleNumber] = useState(1);
     const [workingMinutes, setWorkingMinutes] = useState(25);
-    const [workingSeconds, setWorkingSeconds] = useState(0);
     const [shortBreakMinutes, setShortBreakMinutes] = useState(5);
-    const [shortBreakSeconds, setShortBreakSeconds] = useState(0);
     const [longBreakMinutes, setLongBreakMinutes] = useState(15);
-    const [longBreakSeconds, setLongBreakSeconds] = useState(0);
+    const timerWorker = new Worker(timerWorkerScript);
 
     const settingsToggle = () => {
         setShowSettings(!showSettings);
     };
 
     return (
-        <div className="bg-amber-100 h-screen w-screen">
+        <div className="bg-amber-200 h-screen w-screen">
             <SettingsContent.Provider
                 value={{
+                    showTabTimer,
                     workingMinutes,
-                    workingSeconds,
                     shortBreakMinutes,
-                    shortBreakSeconds,
                     longBreakMinutes,
-                    longBreakSeconds,
                     cycleNumber,
+                    timerWorker,
+                    setTabTimer,
                     setWorkingMinutes,
-                    setWorkingSeconds,
                     setShortBreakMinutes,
-                    setShortBreakSeconds,
                     setLongBreakMinutes,
-                    setLongBreakSeconds,
                     setCycleNumber,
                 }}
             >
@@ -54,7 +47,14 @@ function App() {
                         <img
                             src={gearIcon}
                             className="size-10 m-1"
-                            onClick={settingsToggle}
+                            onClick={() => {
+                                settingsToggle();
+                                timerWorker.postMessage({
+                                    timerRunning: false,
+                                    minutesRemaining: null,
+                                    secondsRemaining: null,
+                                });
+                            }}
                             alt="Gear Icon for Settings"
                         />
                     </div>

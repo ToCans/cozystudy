@@ -1,24 +1,16 @@
-//import "../index.css";
 import TimeDisplay from "./timeDisplay";
 import InteractiveButton from "./timeButton";
-//import ProgressBarTest from "./progressBar";
 import SettingsContent from "./settingsContent";
-import worker_script from "../scripts/worker";
-
 import { useState, useEffect, useContext } from "react";
 
 function Timer() {
     // Setting Context used
     const settings = useContext(SettingsContent);
-
     // Different State Handling
-    const [timerRunning, setTimerState] = useState(false);
-    const [minutesRemaining, setMinutesRemaining] = useState(
-        settings.workingMinutes
-    );
-    const [secondsRemaining, setSecondsRemaining] = useState(
-        settings.workingSeconds
-    );
+    const [timerRunning, setTimerRunning] = useState(false);
+    const [minutesRemaining, setMinutesRemaining] = useState(25);
+    const [secondsRemaining, setSecondsRemaining] = useState(0);
+
     /*
     const [progressBarValue, setProgressBarValue] = useState(0);
     const [progressBarTotal, setProgressBarTotal] = useState(
@@ -26,42 +18,21 @@ function Timer() {
     );
     */
 
-    let myWorker = new Worker(worker_script);
-
     // Running Timer and Progress Bar
-
     useEffect(() => {
-        if (timerRunning === true) {
-            myWorker.postMessage({
-                timerRunning: true,
-                minutesRemaining: minutesRemaining,
-                secondsRemaining: secondsRemaining,
-            });
-        }
-        if (timerRunning === false) {
-            myWorker.postMessage({
-                timerRunning: false,
-                minutesRemaining: minutesRemaining,
-                secondsRemaining: secondsRemaining,
-            });
-            myWorker.terminate();
-        }
-    });
-
-    useEffect(() => {
-        myWorker.onmessage = (e) => {
-            let minutesRemainingDisplay = e.data.minutesRemaining;
-            let secondsRemainingDisplay = e.data.secondsRemaining;
-
-            setMinutesRemaining(minutesRemainingDisplay);
-            setSecondsRemaining(secondsRemainingDisplay);
+        settings.timerWorker.onmessage = (e) => {
+            console.log("Worker Message received");
 
             if (
-                minutesRemainingDisplay === 0 &&
-                secondsRemainingDisplay === 0
+                e.data.minutesRemaining === 0 &&
+                e.data.secondsRemaining === -1
             ) {
-                setTimerState(false);
+                setTimerRunning(false);
                 settings.setCycleNumber(settings.cycleNumber + 1);
+            } else {
+                setTimerRunning(true);
+                setMinutesRemaining(e.data.minutesRemaining);
+                setSecondsRemaining(e.data.secondsRemaining);
             }
         };
     });
@@ -76,11 +47,19 @@ function Timer() {
     }, [progressBarTotal, minutesRemaining, secondsRemaining]);
     */
 
+    useEffect(() => {
+        if (settings.showTabTimer) {
+            document.title = `${minutesRemaining}:${secondsRemaining}`;
+        } else {
+            document.title = "CozyStudy";
+        }
+    }, [settings.showTabTimer, minutesRemaining, secondsRemaining]);
+
     // Break Handling based on Break State
     useEffect(() => {
         // Long Break Handling
         if (settings.cycleNumber % 8 === 0) {
-            setSecondsRemaining(settings.longBreakSeconds);
+            setSecondsRemaining(0);
             setMinutesRemaining(settings.longBreakMinutes);
             /*
             setProgressBarTotal(
@@ -90,7 +69,7 @@ function Timer() {
         }
         // Short Break Handling
         else if (settings.cycleNumber % 2 === 0) {
-            setSecondsRemaining(settings.shortBreakSeconds);
+            setSecondsRemaining(0);
             setMinutesRemaining(settings.shortBreakMinutes);
             /*
             setProgressBarTotal(
@@ -100,7 +79,7 @@ function Timer() {
         }
         // Normal Study Time Check
         else {
-            setSecondsRemaining(settings.workingSeconds);
+            setSecondsRemaining(0);
             setMinutesRemaining(settings.workingMinutes);
             /*
             setProgressBarTotal(
@@ -120,8 +99,6 @@ function Timer() {
         ) {
             // lowHighChime played for breaks finishing
             if (settings.cycleNumber % 2 === 0) {
-                // Audio Used
-
                 const breakFinishAudio = new Audio(
                     "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/lowHighChime.mp3?raw=true"
                 );
@@ -139,16 +116,16 @@ function Timer() {
         }
     }, [
         settings.cycleNumber,
+        timerRunning,
         minutesRemaining,
         secondsRemaining,
-        timerRunning,
     ]);
 
     // Timer Display Information
     let cycleDisplay = Math.ceil(settings.cycleNumber / 2);
 
     return (
-        <div className="bg-slate-50">
+        <div className="bg-slate-400">
             <TimeDisplay
                 minutes={minutesRemaining}
                 seconds={secondsRemaining}
@@ -156,21 +133,18 @@ function Timer() {
             <div className="timeButtonRow">
                 <InteractiveButton
                     purpose="Start"
-                    cycleState={settings.cycleNumber}
-                    timerStateChanger={setTimerState}
-                    cycleStateChanger={settings.setCycleNumber}
+                    minutesRemaining={minutesRemaining}
+                    secondsRemaining={secondsRemaining}
                 />
                 <InteractiveButton
                     purpose="Pause"
-                    cycleState={settings.cycleNumber}
-                    timerStateChanger={setTimerState}
-                    cycleStateChanger={settings.setCycleNumber}
+                    minutesRemaining={minutesRemaining}
+                    secondsRemaining={secondsRemaining}
                 />
                 <InteractiveButton
                     purpose="Skip"
-                    cycleState={settings.cycleNumber}
-                    timerStateChanger={setTimerState}
-                    cycleStateChanger={settings.setCycleNumber}
+                    minutesRemaining={minutesRemaining}
+                    secondsRemaining={secondsRemaining}
                 />
             </div>
             <p>Current Cycle: {cycleDisplay}</p>

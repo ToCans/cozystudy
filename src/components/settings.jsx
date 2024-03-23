@@ -6,9 +6,9 @@ const Settings = () => {
     const settings = useContext(SettingsContent);
 
     return (
-        <div className="settingsContainer">
+        <div>
             <h1>Here are the settings!</h1>
-            <div className="settingsRow">
+            <div>
                 <button
                     onClick={() =>
                         settings.setWorkingMinutes(settings.workingMinutes - 1)
@@ -25,7 +25,7 @@ const Settings = () => {
                     +
                 </button>
             </div>
-            <div className="settingsRow">
+            <div>
                 <button
                     onClick={() =>
                         settings.setShortBreakMinutes(
@@ -49,7 +49,7 @@ const Settings = () => {
                     +
                 </button>
             </div>
-            <div className="settingsRow">
+            <div>
                 <button
                     onClick={() =>
                         settings.setLongBreakMinutes(
@@ -71,6 +71,15 @@ const Settings = () => {
                 >
                     +
                 </button>
+            </div>
+            <div>
+                <label htmlFor="tabTimer">Show Time in Tab</label>
+                <input
+                    name="tabTimer"
+                    type="checkbox"
+                    checked={settings.showTabTimer}
+                    onChange={(e) => settings.setTabTimer(e.target.checked)}
+                />
             </div>
         </div>
     );

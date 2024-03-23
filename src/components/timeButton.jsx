@@ -1,16 +1,18 @@
-const InteractiveButton = ({
-    purpose,
-    cycleState,
-    timerStateChanger,
-    cycleStateChanger,
-}) => {
+import SettingsContent from "./settingsContent";
+import { useContext } from "react";
+
+const InteractiveButton = ({ purpose, minutesRemaining, secondsRemaining }) => {
+    const settings = useContext(SettingsContent);
     // Start Button Handling
     if (purpose === "Start") {
         return (
             <button
                 onClick={() => {
-                    console.log("Start Button Clicked");
-                    timerStateChanger(true);
+                    settings.timerWorker.postMessage({
+                        timerRunning: true,
+                        minutesRemaining: minutesRemaining,
+                        secondsRemaining: secondsRemaining,
+                    });
                 }}
             >
                 Start
@@ -22,8 +24,11 @@ const InteractiveButton = ({
         return (
             <button
                 onClick={() => {
-                    console.log("Pause Button Clicked");
-                    timerStateChanger(false);
+                    settings.timerWorker.postMessage({
+                        timerRunning: false,
+                        minutesRemaining: null,
+                        secondsRemaining: null,
+                    });
                 }}
             >
                 Pause
@@ -35,9 +40,12 @@ const InteractiveButton = ({
         return (
             <button
                 onClick={() => {
-                    console.log("Stop Button Clicked");
-                    timerStateChanger(false);
-                    cycleStateChanger(cycleState + 1);
+                    settings.timerWorker.postMessage({
+                        timerRunning: false,
+                        minutesRemaining: null,
+                        secondsRemaining: null,
+                    });
+                    settings.setCycleNumber(settings.cycleNumber + 1);
                 }}
             >
                 Skip

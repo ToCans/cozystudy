@@ -1,7 +1,9 @@
 const TimeDisplay = ({ minutes, seconds }) => {
+    // Formatting Function Used for Timer
     const formattingCheck = (minutes, seconds) => {
         let timerMinutes;
         let timerSeconds;
+        let timerDisplay;
 
         if (minutes < 10) {
             timerMinutes = `0${minutes}`;
@@ -15,16 +17,14 @@ const TimeDisplay = ({ minutes, seconds }) => {
             timerSeconds = seconds;
         }
 
-        return [timerMinutes, timerSeconds];
+        timerDisplay = `${timerMinutes}:${timerSeconds}`;
+
+        return timerDisplay;
     };
 
-    const timer = formattingCheck(minutes, seconds);
+    const time = formattingCheck(minutes, seconds);
 
-    return (
-        <p className="text-9xl">
-            {timer[0]}:{timer[1]}
-        </p>
-    );
+    return <p className="text-9xl">{time}</p>;
 };
 
 export default TimeDisplay;
