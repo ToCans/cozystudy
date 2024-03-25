@@ -125,12 +125,12 @@ function Timer() {
     let cycleDisplay = Math.ceil(settings.cycleNumber / 2);
 
     return (
-        <div className="bg-slate-400">
+        <div className="bg-slate-400 container">
             <TimeDisplay
                 minutes={minutesRemaining}
                 seconds={secondsRemaining}
             />
-            <div className="timeButtonRow">
+            <div className="row">
                 <InteractiveButton
                     purpose="Start"
                     minutesRemaining={minutesRemaining}

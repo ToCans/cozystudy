@@ -37,31 +37,28 @@ function App() {
                     setCycleNumber,
                 }}
             >
-                <div className="flex flex-col">
-                    <div className="fixed top-0 w-11/12 flex flex-row justify-end">
-                        <img
-                            src={questionIcon}
-                            className="size-10 m-1"
-                            alt="Question Mark Icon for Questions"
-                        />
-                        <img
-                            src={gearIcon}
-                            className="size-10 m-1"
-                            onClick={() => {
-                                settingsToggle();
-                                timerWorker.postMessage({
-                                    timerRunning: false,
-                                    minutesRemaining: null,
-                                    secondsRemaining: null,
-                                });
-                            }}
-                            alt="Gear Icon for Settings"
-                        />
-                    </div>
-                    <div>
-                        {showSettings === false ? <Timer /> : <Settings />}
-                    </div>
+                <div className=" flex flex-row justify-end">
+                    <img
+                        src={questionIcon}
+                        className="size-10 m-1"
+                        alt="Question Mark Icon for Questions"
+                    />
+                    <img
+                        src={gearIcon}
+                        className="size-10 m-1"
+                        onClick={() => {
+                            settingsToggle();
+                            timerWorker.postMessage({
+                                timerRunning: false,
+                                minutesRemaining: null,
+                                secondsRemaining: null,
+                            });
+                        }}
+                        alt="Gear Icon for Settings"
+                    />
                 </div>
+
+                {showSettings === false ? <Timer /> : <Settings />}
             </SettingsContent.Provider>
         </div>
     );
