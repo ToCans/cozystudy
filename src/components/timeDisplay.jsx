@@ -1,30 +1,30 @@
 const TimeDisplay = ({ minutes, seconds }) => {
-    // Formatting Function Used for Timer
-    const formattingCheck = (minutes, seconds) => {
-        let timerMinutes;
-        let timerSeconds;
-        let timerDisplay;
+	// Formatting Function Used for Timer
+	const formattingCheck = (minutes, seconds) => {
+		let timerMinutes;
+		let timerSeconds;
+		let timerDisplay;
 
-        if (minutes < 10) {
-            timerMinutes = `0${minutes}`;
-        } else {
-            timerMinutes = minutes;
-        }
+		if (minutes < 10) {
+			timerMinutes = `0${minutes}`;
+		} else {
+			timerMinutes = minutes;
+		}
 
-        if (seconds < 10) {
-            timerSeconds = `0${seconds}`;
-        } else {
-            timerSeconds = seconds;
-        }
+		if (seconds < 10) {
+			timerSeconds = `0${seconds}`;
+		} else {
+			timerSeconds = seconds;
+		}
 
-        timerDisplay = `${timerMinutes}:${timerSeconds}`;
+		timerDisplay = `${timerMinutes}:${timerSeconds}`;
 
-        return timerDisplay;
-    };
+		return timerDisplay;
+	};
 
-    const time = formattingCheck(minutes, seconds);
+	const time = formattingCheck(minutes, seconds);
 
-    return <p className="text-9xl">{time}</p>;
+	return <p className="text-9xl text-center">{time}</p>;
 };
 
 export default TimeDisplay;
