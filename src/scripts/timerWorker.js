@@ -1,5 +1,7 @@
 // worker.js
+
 const workercode = () => {
+    let active = false;
     let interval;
 
     // On Message Handling from Timer
@@ -9,7 +11,8 @@ const workercode = () => {
         let secondsRemaining = e.data.secondsRemaining;
 
         // Timer Running Handling
-        if (e.data.timerRunning === true) {
+        if (e.data.timerRunning === true && active === false) {
+            active = true;
             interval = setInterval(() => {
                 // 0 and -1 used as we want to show 0:00 in the timer display
                 if (minutesRemaining === 0 && secondsRemaining === -1) {
@@ -36,6 +39,7 @@ const workercode = () => {
         }
         // Timer Stop Handling
         else {
+            active = false;
             clearInterval(interval);
         }
     };

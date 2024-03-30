@@ -1,84 +1,82 @@
 //import "../index.css";
 import SettingsContent from "./settingsContent";
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
+import { MinusCircleIcon } from "@heroicons/react/24/outline";
 import { useContext } from "react";
 
 const Settings = () => {
     const settings = useContext(SettingsContent);
 
     return (
-        <div>
-            <h1>Here are the settings!</h1>
-            <div>
-                <button
-                    onClick={() =>
-                        settings.setWorkingMinutes(settings.workingMinutes - 1)
-                    }
-                >
-                    -
-                </button>
-                <p>Here are the Working minutes: {settings.workingMinutes}</p>
-                <button
+        <div className="bg-slate-200 w-4/5 flex flex-col shadow-md rounded-lg mx-3 p-3 space-y-3 justify-center items-center">
+            <h1 className="text-3xl font-semibold text-center select-none">
+                Here are the settings!
+            </h1>
+            <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
+                <MinusCircleIcon
+                    className="size-6 sm:mt-1"
+                    onClick={() => {
+                        if (settings.workingMinutes > 1) {
+                            settings.setWorkingMinutes(
+                                settings.workingMinutes - 1
+                            );
+                        }
+                    }}
+                />
+                <p className="text-center align-middle select-none">
+                    Working Minutes: {settings.workingMinutes}
+                </p>
+                <PlusCircleIcon
+                    className="size-6 sm:mt-1"
                     onClick={() =>
                         settings.setWorkingMinutes(settings.workingMinutes + 1)
                     }
-                >
-                    +
-                </button>
+                />
             </div>
-            <div>
-                <button
-                    onClick={() =>
-                        settings.setShortBreakMinutes(
-                            settings.shortBreakMinutes - 1
-                        )
-                    }
-                >
-                    -
-                </button>
-                <p>
-                    Here are the Short Break minutes:{" "}
-                    {settings.shortBreakMinutes}
+            <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
+                <MinusCircleIcon
+                    className="size-6 sm:mt-1"
+                    onClick={() => {
+                        if (settings.shortBreakMinutes > 1) {
+                            settings.setShortBreakMinutes(
+                                settings.shortBreakMinutes - 1
+                            );
+                        }
+                    }}
+                />
+                <p className="text-center align-middle select-none">
+                    Short Break Minutes: {settings.shortBreakMinutes}
                 </p>
-                <button
+                <PlusCircleIcon
+                    className="size-6 sm:mt-1"
                     onClick={() =>
                         settings.setShortBreakMinutes(
                             settings.shortBreakMinutes + 1
                         )
                     }
-                >
-                    +
-                </button>
+                />
             </div>
-            <div>
-                <button
-                    onClick={() =>
-                        settings.setLongBreakMinutes(
-                            settings.longBreakMinutes - 1
-                        )
-                    }
-                >
-                    -
-                </button>
-                <p>
-                    Here are the Long Break minutes: {settings.longBreakMinutes}
+            <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
+                <MinusCircleIcon
+                    className="size-6 sm:mt-1"
+                    onClick={() => {
+                        if (settings.longBreakMinutes > 1) {
+                            settings.setLongBreakMinutes(
+                                settings.longBreakMinutes - 1
+                            );
+                        }
+                    }}
+                />
+                <p className="text-center align-middle select-none">
+                    Long Break Minutes: {settings.longBreakMinutes}
                 </p>
-                <button
+                <PlusCircleIcon
+                    className="size-6 sm:mt-1"
                     onClick={() =>
                         settings.setLongBreakMinutes(
                             settings.longBreakMinutes + 1
                         )
                     }
-                >
-                    +
-                </button>
-            </div>
-            <div>
-                <label htmlFor="tabTimer">Show Time in Tab</label>
-                <input
-                    name="tabTimer"
-                    type="checkbox"
-                    checked={settings.showTabTimer}
-                    onChange={(e) => settings.setTabTimer(e.target.checked)}
                 />
             </div>
         </div>
