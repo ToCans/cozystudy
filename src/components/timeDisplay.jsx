@@ -5,6 +5,7 @@ const TimeDisplay = ({ minutes, seconds }) => {
         let timerSeconds;
         let timerDisplay;
 
+        // Timer Display
         if (minutes < 10) {
             timerMinutes = `0${minutes}`;
         } else {
