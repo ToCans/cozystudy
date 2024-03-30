@@ -6,7 +6,7 @@ const workercode = () => {
 
     // On Message Handling from Timer
     onmessage = function (e) {
-        console.log("Worker Received a message of:", e.data);
+        // Defining Receiveed Data
         let minutesRemaining = e.data.minutesRemaining;
         let secondsRemaining = e.data.secondsRemaining;
 

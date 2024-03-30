@@ -17,8 +17,6 @@ function Timer() {
     // Running Timer
     useEffect(() => {
         settings.timerWorker.onmessage = (e) => {
-            console.log("Worker Message received");
-
             if (
                 e.data.minutesRemaining === 0 &&
                 e.data.secondsRemaining === -1
@@ -54,7 +52,6 @@ function Timer() {
 
     // Break Handling based on Break State
     useEffect(() => {
-        console.log("Break Handling");
         // Long Break Handling
         if (settings.cycleNumber % 8 === 0) {
             setSecondsRemaining(0);
