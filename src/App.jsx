@@ -1,6 +1,7 @@
 import "./index.css";
-import { Cog6ToothIcon } from "@heroicons/react/24/outline";
-import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { PiGearLight } from "react-icons/pi";
+
+import { PiQuestionLight } from "react-icons/pi";
 import Timer from "./components/timer";
 import Settings from "./components/settings";
 import SettingsContent from "./components/settingsContent";
@@ -38,12 +39,12 @@ function App() {
                 }}
             >
                 <div className=" flex flex-row justify-end top-0 absolute w-full">
-                    <QuestionMarkCircleIcon
-                        className="size-12 stroke-1.5 hover:stroke-2"
+                    <PiQuestionLight
+                        className="size-12 hover:stroke-2"
                         alt="Question Mark Icon for Questions"
                     />
-                    <Cog6ToothIcon
-                        className="size-12 stroke-1.5 hover:stroke-2"
+                    <PiGearLight
+                        className="size-12 hover:stroke-2"
                         alt="Gear Icon for Settings"
                         onClick={() => {
                             settingsToggle();

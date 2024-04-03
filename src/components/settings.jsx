@@ -1,7 +1,8 @@
 //import "../index.css";
 import SettingsContent from "./settingsContent";
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
-import { MinusCircleIcon } from "@heroicons/react/24/outline";
+import { HiOutlinePlusCircle } from "react-icons/hi";
+import { HiOutlineMinusCircle } from "react-icons/hi";
+
 import { useContext } from "react";
 
 const Settings = () => {
@@ -13,7 +14,7 @@ const Settings = () => {
                 Here are the settings!
             </h1>
             <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
-                <MinusCircleIcon
+                <HiOutlineMinusCircle
                     className="size-6 sm:mt-1"
                     onClick={() => {
                         if (settings.workingMinutes > 1) {
@@ -26,7 +27,7 @@ const Settings = () => {
                 <p className="text-center align-middle select-none">
                     Working Minutes: {settings.workingMinutes}
                 </p>
-                <PlusCircleIcon
+                <HiOutlinePlusCircle
                     className="size-6 sm:mt-1"
                     onClick={() =>
                         settings.setWorkingMinutes(settings.workingMinutes + 1)
@@ -34,7 +35,7 @@ const Settings = () => {
                 />
             </div>
             <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
-                <MinusCircleIcon
+                <HiOutlineMinusCircle
                     className="size-6 sm:mt-1"
                     onClick={() => {
                         if (settings.shortBreakMinutes > 1) {
@@ -47,7 +48,7 @@ const Settings = () => {
                 <p className="text-center align-middle select-none">
                     Short Break Minutes: {settings.shortBreakMinutes}
                 </p>
-                <PlusCircleIcon
+                <HiOutlinePlusCircle
                     className="size-6 sm:mt-1"
                     onClick={() =>
                         settings.setShortBreakMinutes(
@@ -57,7 +58,7 @@ const Settings = () => {
                 />
             </div>
             <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
-                <MinusCircleIcon
+                <HiOutlineMinusCircle
                     className="size-6 sm:mt-1"
                     onClick={() => {
                         if (settings.longBreakMinutes > 1) {
@@ -70,7 +71,7 @@ const Settings = () => {
                 <p className="text-center align-middle select-none">
                     Long Break Minutes: {settings.longBreakMinutes}
                 </p>
-                <PlusCircleIcon
+                <HiOutlinePlusCircle
                     className="size-6 sm:mt-1"
                     onClick={() =>
                         settings.setLongBreakMinutes(
