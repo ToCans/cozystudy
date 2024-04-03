@@ -37,7 +37,7 @@ function Timer() {
     const fireAudio = useMemo(
         () =>
             new Audio(
-                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/campefireLoop.mp3?raw=true"
+                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/campfireLoop.mp3?raw=true"
             ),
         []
     );
@@ -157,21 +157,29 @@ function Timer() {
             rainAudio.currentTime = 0;
         };
 
+        function loopAudio() {
+            var buffer = 0.35;
+            if (this.currentTime > this.duration - buffer) {
+                this.currentTime = 0;
+                this.play();
+            }
+        }
+
         if (audioPlaying === "Fire") {
             stopAllAudio();
             fireAudio.volume = 0.75;
             fireAudio.play();
-            fireAudio.loop = true;
+            fireAudio.addEventListener("timeupdate", loopAudio, false);
         } else if (audioPlaying === "Wind") {
             stopAllAudio();
-            windAudio.volume = 0.75;
             windAudio.play();
-            windAudio.loop = true;
+            windAudio.volume = 0.7;
+            windAudio.addEventListener("timeupdate", loopAudio, false);
         } else if (audioPlaying === "Rain") {
             stopAllAudio();
-            rainAudio.volume = 0.75;
+            rainAudio.volume = 0.7;
             rainAudio.play();
-            rainAudio.loop = true;
+            rainAudio.addEventListener("timeupdate", loopAudio, false);
         } else {
             stopAllAudio();
         }
