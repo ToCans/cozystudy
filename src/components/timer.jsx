@@ -177,7 +177,7 @@ function Timer() {
             windAudio.addEventListener("timeupdate", loopAudio, false);
         } else if (audioPlaying === "Rain") {
             stopAllAudio();
-            rainAudio.volume = 0.7;
+            rainAudio.volume = 0.5;
             rainAudio.play();
             rainAudio.addEventListener("timeupdate", loopAudio, false);
         } else {
