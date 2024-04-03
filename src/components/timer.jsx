@@ -37,7 +37,7 @@ function Timer() {
     const fireAudio = useMemo(
         () =>
             new Audio(
-                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/fireLoop.mp3?raw=true"
+                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/campefireLoop.mp3?raw=true"
             ),
         []
     );
@@ -159,14 +159,17 @@ function Timer() {
 
         if (audioPlaying === "Fire") {
             stopAllAudio();
+            fireAudio.volume = 0.75;
             fireAudio.play();
             fireAudio.loop = true;
         } else if (audioPlaying === "Wind") {
             stopAllAudio();
+            windAudio.volume = 0.75;
             windAudio.play();
             windAudio.loop = true;
         } else if (audioPlaying === "Rain") {
             stopAllAudio();
+            rainAudio.volume = 0.75;
             rainAudio.play();
             rainAudio.loop = true;
         } else {
