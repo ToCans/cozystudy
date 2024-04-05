@@ -1,13 +1,12 @@
-// eslint-disable-next-line
-import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
+import { Analytics } from "@vercel/analytics/react";
 import { PiGearLight } from "react-icons/pi";
 import { PiQuestionLight } from "react-icons/pi";
+import { useState } from "react";
 import Timer from "./components/timer";
 import Settings from "./components/settings";
 import SettingsContent from "./components/settingsContent";
 import timerWorkerScript from "./scripts/timerWorker.js";
-import { useState } from "react";
 
 function App() {
     const [showSettings, setShowSettings] = useState(false);
@@ -61,6 +60,7 @@ function App() {
                     {showSettings === false ? <Timer /> : <Settings />}
                 </div>
             </SettingsContent.Provider>
+            <Analytics />
         </div>
     );
 }
