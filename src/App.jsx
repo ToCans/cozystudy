@@ -1,6 +1,7 @@
+// eslint-disable-next-line
+import { Analytics } from "@vercel/analytics/react";
 import "./index.css";
 import { PiGearLight } from "react-icons/pi";
-
 import { PiQuestionLight } from "react-icons/pi";
 import Timer from "./components/timer";
 import Settings from "./components/settings";
