@@ -3,6 +3,11 @@ import ProgressBar from "./progressBar";
 import InteractiveButton from "./timeButton";
 import SettingsContent from "./settingsContent";
 import SoundButton from "./soundButton";
+import breakFinishAudioClip from "../assets/sounds/complete.mp3";
+import workFinishAudioClip from "../assets/sounds/lowHighChime.mp3";
+import campfireAudioLoop from "../assets/sounds/campfireLoop.mp3";
+import windAudioLoop from "../assets/sounds/windLoop.mp3";
+import rainAudioLoop from "../assets/sounds/rainLoop.mp3";
 import { useState, useEffect, useContext, useMemo } from "react";
 
 function Timer() {
@@ -20,41 +25,11 @@ function Timer() {
     const [audioPlaying, setAudioPlaying] = useState("None");
 
     // Audio Definitions
-    const breakFinishAudio = useMemo(
-        () =>
-            new Audio(
-                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/lowHighChime.mp3?raw=true"
-            ),
-        []
-    );
-    const workFinishAudio = useMemo(
-        () =>
-            new Audio(
-                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/complete.mp3?raw=true"
-            ),
-        []
-    );
-    const fireAudio = useMemo(
-        () =>
-            new Audio(
-                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/campfireLoop.mp3?raw=true"
-            ),
-        []
-    );
-    const windAudio = useMemo(
-        () =>
-            new Audio(
-                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/windLoop.mp3?raw=true"
-            ),
-        []
-    );
-    const rainAudio = useMemo(
-        () =>
-            new Audio(
-                "https://github.com/ToCans/cozystudy/blob/main/src/assets/sounds/rainLoop.mp3?raw=true"
-            ),
-        []
-    );
+    const breakFinishAudio = useMemo(() => new Audio(breakFinishAudioClip), []);
+    const workFinishAudio = useMemo(() => new Audio(workFinishAudioClip), []);
+    const fireAudio = useMemo(() => new Audio(campfireAudioLoop), []);
+    const windAudio = useMemo(() => new Audio(windAudioLoop), []);
+    const rainAudio = useMemo(() => new Audio(rainAudioLoop), []);
 
     // Running Timer
     useEffect(() => {
