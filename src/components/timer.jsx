@@ -3,12 +3,8 @@ import ProgressBar from "./progressBar";
 import InteractiveButton from "./timeButton";
 import SettingsContent from "./settingsContent";
 import SoundButton from "./soundButton";
-import breakFinishAudioClip from "../assets/sounds/complete.mp3";
-import workFinishAudioClip from "../assets/sounds/lowHighChime.mp3";
-import campfireAudioLoop from "../assets/sounds/campfireLoop.mp3";
-import windAudioLoop from "../assets/sounds/windLoop.mp3";
-import rainAudioLoop from "../assets/sounds/rainLoop.mp3";
-import { useState, useEffect, useContext, useMemo } from "react";
+
+import { useState, useEffect, useContext } from "react";
 
 function Timer() {
     // Setting Context used
@@ -24,16 +20,9 @@ function Timer() {
     );
     const [audioPlaying, setAudioPlaying] = useState("None");
 
-    // Audio Definitions
-    const breakFinishAudio = useMemo(() => new Audio(breakFinishAudioClip), []);
-    const workFinishAudio = useMemo(() => new Audio(workFinishAudioClip), []);
-    const fireAudio = useMemo(() => new Audio(campfireAudioLoop), []);
-    const windAudio = useMemo(() => new Audio(windAudioLoop), []);
-    const rainAudio = useMemo(() => new Audio(rainAudioLoop), []);
-
     // Running Timer
     useEffect(() => {
-        settings.timerWorker.onmessage = (e) => {
+        settings.timerWorker.current.onmessage = (e) => {
             if (
                 e.data.minutesRemaining === 0 &&
                 e.data.secondsRemaining === -1
@@ -99,13 +88,13 @@ function Timer() {
         ) {
             // lowHighChime played for breaks finishing
             if (settings.cycleNumber % 2 === 0) {
-                breakFinishAudio.volume = 0.5;
-                breakFinishAudio.play();
+                settings.breakFinishAudio.current.volume = 0.5;
+                settings.breakFinishAudio.current.play();
             }
             // Complete played for work finishing
             else {
-                workFinishAudio.volume = 0.5;
-                workFinishAudio.play();
+                settings.workFinishAudio.current.volume = 0.5;
+                settings.workFinishAudio.current.play();
             }
         }
     }, [
@@ -113,8 +102,8 @@ function Timer() {
         timerRunning,
         minutesRemaining,
         secondsRemaining,
-        breakFinishAudio,
-        workFinishAudio,
+        settings.breakFinishAudio,
+        settings.workFinishAudio,
     ]);
 
     // Ambient Sounds Handling
@@ -122,14 +111,14 @@ function Timer() {
         // Stopping Audio Function
         const stopAllAudio = () => {
             // Fire Audio Off
-            fireAudio.pause();
-            fireAudio.currentTime = 0;
+            settings.fireAudio.current.pause();
+            settings.fireAudio.current.currentTime = 0;
             // Wind Audio Off
-            windAudio.pause();
-            windAudio.currentTime = 0;
+            settings.windAudio.current.pause();
+            settings.windAudio.current.currentTime = 0;
             // Rain Audio Off
-            rainAudio.pause();
-            rainAudio.currentTime = 0;
+            settings.rainAudio.current.pause();
+            settings.rainAudio.current.currentTime = 0;
         };
 
         function loopAudio() {
@@ -142,23 +131,40 @@ function Timer() {
 
         if (audioPlaying === "Fire") {
             stopAllAudio();
-            fireAudio.volume = 0.75;
-            fireAudio.play();
-            fireAudio.addEventListener("timeupdate", loopAudio, false);
+            settings.fireAudio.current.volume = 0.75;
+            settings.fireAudio.current.play();
+            settings.fireAudio.current.addEventListener(
+                "timeupdate",
+                loopAudio,
+                false
+            );
         } else if (audioPlaying === "Wind") {
             stopAllAudio();
-            windAudio.play();
-            windAudio.volume = 0.7;
-            windAudio.addEventListener("timeupdate", loopAudio, false);
+            settings.windAudio.current.play();
+            settings.windAudio.current.volume = 0.7;
+            settings.windAudio.current.addEventListener(
+                "timeupdate",
+                loopAudio,
+                false
+            );
         } else if (audioPlaying === "Rain") {
             stopAllAudio();
-            rainAudio.volume = 0.5;
-            rainAudio.play();
-            rainAudio.addEventListener("timeupdate", loopAudio, false);
+            settings.rainAudio.current.volume = 0.5;
+            settings.rainAudio.current.play();
+            settings.rainAudio.current.addEventListener(
+                "timeupdate",
+                loopAudio,
+                false
+            );
         } else {
             stopAllAudio();
         }
-    }, [audioPlaying, fireAudio, windAudio, rainAudio]);
+    }, [
+        audioPlaying,
+        settings.fireAudio,
+        settings.windAudio,
+        settings.rainAudio,
+    ]);
 
     // Timer Display Information
     let cycleDisplay = Math.ceil(settings.cycleNumber / 2);

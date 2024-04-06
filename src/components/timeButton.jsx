@@ -10,7 +10,7 @@ const InteractiveButton = ({ purpose, minutesRemaining, secondsRemaining }) => {
             <button
                 id="startButton"
                 onClick={() => {
-                    settings.timerWorker.postMessage({
+                    settings.timerWorker.current.postMessage({
                         timerRunning: true,
                         minutesRemaining: minutesRemaining,
                         secondsRemaining: secondsRemaining,
@@ -28,7 +28,7 @@ const InteractiveButton = ({ purpose, minutesRemaining, secondsRemaining }) => {
             <button
                 id="pauseButton"
                 onClick={() => {
-                    settings.timerWorker.postMessage({
+                    settings.timerWorker.current.postMessage({
                         timerRunning: false,
                         minutesRemaining: null,
                         secondsRemaining: null,
@@ -46,7 +46,7 @@ const InteractiveButton = ({ purpose, minutesRemaining, secondsRemaining }) => {
             <button
                 id="skipButton"
                 onClick={() => {
-                    settings.timerWorker.postMessage({
+                    settings.timerWorker.current.postMessage({
                         timerRunning: false,
                         minutesRemaining: null,
                         secondsRemaining: null,
