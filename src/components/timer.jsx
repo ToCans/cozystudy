@@ -12,9 +12,9 @@ function Timer() {
 
     // Different State Handling
     const [timerRunning, setTimerRunning] = useState(false);
-    const [minutesRemaining, setMinutesRemaining] = useState(25);
-    const [secondsRemaining, setSecondsRemaining] = useState(0);
-    const [progressBarValue, setProgressBarValue] = useState(0);
+    const [minutesRemaining, setMinutesRemaining] = useState(null);
+    const [secondsRemaining, setSecondsRemaining] = useState(null);
+    const [progressBarValue, setProgressBarValue] = useState(null);
     const [progressBarTotal, setProgressBarTotal] = useState(
         settings.workingMinutes * 60
     );
@@ -55,28 +55,25 @@ function Timer() {
         }
     }, [settings.showTabTimer, minutesRemaining, secondsRemaining]);
 
-    // Break Handling based on Break State
+    // Timer Count set from Break Handling and Settings change
     useEffect(() => {
-        if (settings.cycleNumber > 1) {
-            // Long Break Handling
-            if (settings.cycleNumber % 8 === 0) {
-                setSecondsRemaining(0);
-                setMinutesRemaining(settings.longBreakMinutes);
-                setProgressBarTotal(settings.longBreakMinutes * 60);
-            }
-            // Short Break Handling
-            else if (settings.cycleNumber % 2 === 0) {
-                setSecondsRemaining(0);
-                setMinutesRemaining(settings.shortBreakMinutes);
-
-                setProgressBarTotal(settings.shortBreakMinutes * 60);
-            }
-            // Normal Study Time Check
-            else {
-                setSecondsRemaining(0);
-                setMinutesRemaining(settings.workingMinutes);
-                setProgressBarTotal(settings.workingMinutes * 60);
-            }
+        // Long Break Handling
+        if (settings.cycleNumber % 8 === 0) {
+            setSecondsRemaining(0);
+            setMinutesRemaining(settings.longBreakMinutes);
+            setProgressBarTotal(settings.longBreakMinutes * 60);
+        }
+        // Short Break Handling
+        else if (settings.cycleNumber % 2 === 0) {
+            setSecondsRemaining(0);
+            setMinutesRemaining(settings.shortBreakMinutes);
+            setProgressBarTotal(settings.shortBreakMinutes * 60);
+        }
+        // Normal Study Time Check
+        else {
+            setSecondsRemaining(0);
+            setMinutesRemaining(settings.workingMinutes);
+            setProgressBarTotal(settings.workingMinutes * 60);
         }
     }, [
         settings.cycleNumber,

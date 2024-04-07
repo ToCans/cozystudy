@@ -23,8 +23,6 @@ function App() {
     const [longBreakMinutes, setLongBreakMinutes] = useState(15);
     const [audioPlaying, setAudioPlaying] = useState("None");
 
-    // Refs
-
     // Audio Definitions
     const breakFinishAudio = useRef(new Audio(breakFinishAudioClip), []);
     const workFinishAudio = useRef(new Audio(workFinishAudioClip), []);
@@ -35,6 +33,7 @@ function App() {
     // Web Worker
     const timerWorker = useRef(new Worker(timerWorkerScript), []);
 
+    // Functions
     const settingsToggle = () => {
         setShowSettings(!showSettings);
     };
