@@ -18,7 +18,6 @@ function Timer() {
     const [progressBarTotal, setProgressBarTotal] = useState(
         settings.workingMinutes * 60
     );
-    const [audioPlaying, setAudioPlaying] = useState("None");
 
     // Running Timer
     useEffect(() => {
@@ -58,26 +57,33 @@ function Timer() {
 
     // Break Handling based on Break State
     useEffect(() => {
-        // Long Break Handling
-        if (settings.cycleNumber % 8 === 0) {
-            setSecondsRemaining(0);
-            setMinutesRemaining(settings.longBreakMinutes);
-            setProgressBarTotal(settings.longBreakMinutes * 60);
-        }
-        // Short Break Handling
-        else if (settings.cycleNumber % 2 === 0) {
-            setSecondsRemaining(0);
-            setMinutesRemaining(settings.shortBreakMinutes);
+        if (settings.cycleNumber > 1) {
+            // Long Break Handling
+            if (settings.cycleNumber % 8 === 0) {
+                setSecondsRemaining(0);
+                setMinutesRemaining(settings.longBreakMinutes);
+                setProgressBarTotal(settings.longBreakMinutes * 60);
+            }
+            // Short Break Handling
+            else if (settings.cycleNumber % 2 === 0) {
+                setSecondsRemaining(0);
+                setMinutesRemaining(settings.shortBreakMinutes);
 
-            setProgressBarTotal(settings.shortBreakMinutes * 60);
+                setProgressBarTotal(settings.shortBreakMinutes * 60);
+            }
+            // Normal Study Time Check
+            else {
+                setSecondsRemaining(0);
+                setMinutesRemaining(settings.workingMinutes);
+                setProgressBarTotal(settings.workingMinutes * 60);
+            }
         }
-        // Normal Study Time Check
-        else {
-            setSecondsRemaining(0);
-            setMinutesRemaining(settings.workingMinutes);
-            setProgressBarTotal(settings.workingMinutes * 60);
-        }
-    }, [settings]);
+    }, [
+        settings.cycleNumber,
+        settings.longBreakMinutes,
+        settings.shortBreakMinutes,
+        settings.workingMinutes,
+    ]);
 
     // End of Cycle Sound Handling
     useEffect(() => {
@@ -104,66 +110,6 @@ function Timer() {
         secondsRemaining,
         settings.breakFinishAudio,
         settings.workFinishAudio,
-    ]);
-
-    // Ambient Sounds Handling
-    useEffect(() => {
-        // Stopping Audio Function
-        const stopAllAudio = () => {
-            // Fire Audio Off
-            settings.fireAudio.current.pause();
-            settings.fireAudio.current.currentTime = 0;
-            // Wind Audio Off
-            settings.windAudio.current.pause();
-            settings.windAudio.current.currentTime = 0;
-            // Rain Audio Off
-            settings.rainAudio.current.pause();
-            settings.rainAudio.current.currentTime = 0;
-        };
-
-        function loopAudio() {
-            var buffer = 0.35;
-            if (this.currentTime > this.duration - buffer) {
-                this.currentTime = 0;
-                this.play();
-            }
-        }
-
-        if (audioPlaying === "Fire") {
-            stopAllAudio();
-            settings.fireAudio.current.volume = 0.75;
-            settings.fireAudio.current.play();
-            settings.fireAudio.current.addEventListener(
-                "timeupdate",
-                loopAudio,
-                false
-            );
-        } else if (audioPlaying === "Wind") {
-            stopAllAudio();
-            settings.windAudio.current.play();
-            settings.windAudio.current.volume = 0.7;
-            settings.windAudio.current.addEventListener(
-                "timeupdate",
-                loopAudio,
-                false
-            );
-        } else if (audioPlaying === "Rain") {
-            stopAllAudio();
-            settings.rainAudio.current.volume = 0.5;
-            settings.rainAudio.current.play();
-            settings.rainAudio.current.addEventListener(
-                "timeupdate",
-                loopAudio,
-                false
-            );
-        } else {
-            stopAllAudio();
-        }
-    }, [
-        audioPlaying,
-        settings.fireAudio,
-        settings.windAudio,
-        settings.rainAudio,
     ]);
 
     // Timer Display Information
@@ -199,19 +145,19 @@ function Timer() {
             <div className="row flex flex-row justify-center w-full space-x-2 m-1">
                 <SoundButton
                     purpose="None"
-                    audioPlayingSetter={setAudioPlaying}
+                    audioPlayingSetter={settings.setAudioPlaying}
                 />
                 <SoundButton
                     purpose="Fire"
-                    audioPlayingSetter={setAudioPlaying}
+                    audioPlayingSetter={settings.setAudioPlaying}
                 />
                 <SoundButton
                     purpose="Wind"
-                    audioPlayingSetter={setAudioPlaying}
+                    audioPlayingSetter={settings.setAudioPlaying}
                 />
                 <SoundButton
                     purpose="Rain"
-                    audioPlayingSetter={setAudioPlaying}
+                    audioPlayingSetter={settings.setAudioPlaying}
                 />
             </div>
         </div>

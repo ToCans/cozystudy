@@ -16,6 +16,7 @@ const workercode = () => {
             interval = setInterval(() => {
                 // 0 and -1 used as we want to show 0:00 in the timer display
                 if (minutesRemaining === 0 && secondsRemaining === -1) {
+                    active = false;
                     clearInterval(interval);
                 }
                 // In the case that secondsRemaining reaches Zero
