@@ -8,6 +8,11 @@ import workFinishAudioClip from "./assets/sounds/lowHighChime.mp3";
 import campfireAudioLoop from "./assets/sounds/campfireLoop.mp3";
 import windAudioLoop from "./assets/sounds/windLoop.mp3";
 import rainAudioLoop from "./assets/sounds/rainLoop.mp3";
+import RainTrain from "./assets/backgrounds/rain_train.gif";
+import CoffeeShop from "./assets/backgrounds/coffeeshop_worker.gif";
+import GirlDog from "./assets/backgrounds/girl_dog.gif";
+import StackedHouse from "./assets/backgrounds/stacked_houses.gif";
+import CornerStore from "./assets/backgrounds/corner_store.gif";
 import Timer from "./components/timer";
 import Settings from "./components/settings";
 import SettingsContent from "./components/settingsContent";
@@ -22,6 +27,7 @@ function App() {
     const [shortBreakMinutes, setShortBreakMinutes] = useState(5);
     const [longBreakMinutes, setLongBreakMinutes] = useState(15);
     const [audioPlaying, setAudioPlaying] = useState("None");
+    const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
 
     // Audio Definitions
     const breakFinishAudio = useRef(new Audio(breakFinishAudioClip), []);
@@ -29,6 +35,22 @@ function App() {
     const fireAudio = useRef(new Audio(campfireAudioLoop), []);
     const windAudio = useRef(new Audio(windAudioLoop), []);
     const rainAudio = useRef(new Audio(rainAudioLoop), []);
+
+    // Image Definitions
+    const backgroundImageNames = [
+        " Rain Train",
+        " Coffee Shop",
+        " Girl Dog",
+        " Stacked House",
+        " Corner Store",
+    ];
+    const backgroundImages = [
+        RainTrain,
+        CoffeeShop,
+        GirlDog,
+        StackedHouse,
+        CornerStore,
+    ];
 
     // Web Worker
     const timerWorker = useRef(new Worker(timerWorkerScript), []);
@@ -82,7 +104,7 @@ function App() {
     }, [audioPlaying, fireAudio, windAudio, rainAudio]);
 
     return (
-        <div className="bg-slate-400 h-screen w-screen overscroll-none">
+        <div className=" h-screen w-screen overscroll-none ">
             <SettingsContent.Provider
                 value={{
                     showTabTimer,
@@ -97,21 +119,25 @@ function App() {
                     windAudio,
                     rainAudio,
                     audioPlaying,
+                    backgroundImages,
+                    backgroundImageNames,
+                    backgroundImageIndex,
                     setTabTimer,
                     setWorkingMinutes,
                     setShortBreakMinutes,
                     setLongBreakMinutes,
                     setCycleNumber,
                     setAudioPlaying,
+                    setBackgroundImageIndex,
                 }}
             >
-                <div className=" flex flex-row justify-end top-0 absolute w-full">
+                <div className=" flex flex-row justify-end top-0 absolute w-full ">
                     <PiQuestionLight
-                        className="size-12 hover:stroke-2"
+                        className="size-12 fill-slate-200 stroke-2 hover:stroke-0"
                         alt="Question Mark Icon for Questions"
                     />
                     <PiGearLight
-                        className="size-12 hover:stroke-2"
+                        className="size-12 fill-slate-200 stroke-2 hover:stroke-0"
                         alt="Gear Icon for Settings"
                         onClick={() => {
                             settingsToggle();
@@ -123,7 +149,14 @@ function App() {
                         }}
                     />
                 </div>
-                <div className="flex flex-col justify-center items-center h-full">
+                <div
+                    className={
+                        "flex flex-col justify-center items-center h-full  bg-no-repeat bg-cover bg-center"
+                    }
+                    style={{
+                        backgroundImage: `url(${backgroundImages[backgroundImageIndex]})`,
+                    }}
+                >
                     {showSettings === false ? <Timer /> : <Settings />}
                 </div>
             </SettingsContent.Provider>
