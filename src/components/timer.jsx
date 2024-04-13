@@ -12,8 +12,10 @@ function Timer() {
 
     // Different State Handling
     const [timerRunning, setTimerRunning] = useState(false);
-    const [minutesRemaining, setMinutesRemaining] = useState(null);
-    const [secondsRemaining, setSecondsRemaining] = useState(null);
+    const [minutesRemaining, setMinutesRemaining] = useState(
+        settings.workingMinutes
+    );
+    const [secondsRemaining, setSecondsRemaining] = useState(0);
     const [progressBarValue, setProgressBarValue] = useState(null);
     const [progressBarTotal, setProgressBarTotal] = useState(
         settings.workingMinutes * 60
