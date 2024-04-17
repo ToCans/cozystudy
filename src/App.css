@@ -1,0 +1,31 @@
+.moonButton {
+    color: #475569;
+}
+
+.moonButton:hover {
+    color: #fef9c3;
+}
+
+.fireButton {
+    color: #475569;
+}
+
+.fireButton:hover {
+    color: #ea580c;
+}
+
+.windButton {
+    color: #475569;
+}
+
+.windButton:hover {
+    color: #15803d;
+}
+
+.rainButton {
+    color: #475569;
+}
+
+.rainButton:hover {
+    color: #2563eb;
+}

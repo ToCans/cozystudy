@@ -28,7 +28,7 @@ const Settings = () => {
                         }
                     }}
                 />
-                <p className="text-center align-middle select-none">
+                <p className="text-center align-middle select-none w-2/5">
                     Working Minutes: {settings.workingMinutes}
                 </p>
                 <HiOutlinePlusCircle
@@ -49,7 +49,7 @@ const Settings = () => {
                         }
                     }}
                 />
-                <p className="text-center align-middle select-none">
+                <p className="text-center align-middle select-none w-2/5">
                     Short Break Minutes: {settings.shortBreakMinutes}
                 </p>
                 <HiOutlinePlusCircle
@@ -61,7 +61,7 @@ const Settings = () => {
                     }
                 />
             </div>
-            <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
+            <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center w-full">
                 <HiOutlineMinusCircle
                     className="size-6 sm:mt-1 hover:stroke-slate-600"
                     onClick={() => {
@@ -72,7 +72,7 @@ const Settings = () => {
                         }
                     }}
                 />
-                <p className="text-center align-middle select-none">
+                <p className="text-center align-middle select-none w-2/5">
                     Long Break Minutes: {settings.longBreakMinutes}
                 </p>
                 <HiOutlinePlusCircle
@@ -84,7 +84,7 @@ const Settings = () => {
                     }
                 />
             </div>
-            <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
+            <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center w-full">
                 <HiOutlineArrowCircleLeft
                     className="size-6 sm:mt-1 hover:stroke-slate-600"
                     onClick={() => {
@@ -99,7 +99,7 @@ const Settings = () => {
                         }
                     }}
                 />
-                <p className="text-center align-middle select-none">
+                <p className="text-center align-middle select-none w-2/5">
                     Background Image:
                     {
                         settings.backgroundImageNames[
