@@ -102,7 +102,12 @@ function Timer() {
 	let cycleDisplay = Math.ceil(settings.cycleNumber / 2);
 
 	return (
-		<div className="bg-slate-200 w-4/5 h-fit flex flex-col shadow-md rounded-lg mx-3 p-3 justify-center items-center opacity-90">
+		<div
+			className="bg-slate-200 w-4/5 h-fit flex flex-col shadow-md rounded-lg mx-3 p-3 justify-center items-center opacity-95"
+			style={{
+				backgroundColor: `${settings.timerTheme[settings.themeIndex]}`,
+			}}
+		>
 			<TimeDisplay minutes={minutesRemaining} seconds={secondsRemaining} />
 			<ProgressBar progressBarValue={progressBarValue} />
 			<div className="row flex flex-row justify-center w-full">
