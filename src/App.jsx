@@ -256,6 +256,7 @@ function App() {
                     {activePage === "Timer" ? <Timer /> : null}
                 </div>
             </SettingsContent.Provider>
+            <Analytics />
         </div>
     );
 }
