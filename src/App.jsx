@@ -3,20 +3,28 @@ import "./App.css";
 import { Analytics } from "@vercel/analytics/react";
 import { PiGearLight, PiQuestionLight } from "react-icons/pi";
 import { IconContext } from "react-icons";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import breakFinishAudioClip from "./assets/sounds/complete.mp3";
 import workFinishAudioClip from "./assets/sounds/lowHighChime.mp3";
 import campfireAudioLoop from "./assets/sounds/campfireLoop.mp3";
 import windAudioLoop from "./assets/sounds/windLoop.mp3";
 import rainAudioLoop from "./assets/sounds/rainLoop.mp3";
 import JapaneseHome from "./assets/backgrounds/JapaneseHome.jpg";
+import JapaneseHomeSmall from "./assets/backgrounds/JapaneseHomeSmall.jpg";
 import DesertSunset from "./assets/backgrounds/DesertSunset.jpg";
+import DesertSunsetSmall from "./assets/backgrounds/DesertSunsetSmall.jpg";
 import MountainSunrise from "./assets/backgrounds/MountainSunrise.jpg";
+import MountainSunriseSmall from "./assets/backgrounds/MountainSunriseSmall.jpg";
 import RainForest from "./assets/backgrounds/RainForest.jpg";
+import RainForestSmall from "./assets/backgrounds/RainForestSmall.jpg";
 import Shibuya from "./assets/backgrounds/Shibuya.jpg";
+import ShibuyaSmall from "./assets/backgrounds/ShibuyaSmall.jpg";
 import WinterForest from "./assets/backgrounds/WinterForest.jpg";
+import WinterForestSmall from "./assets/backgrounds/WinterForestSmall.jpg";
 import WinterMountain from "./assets/backgrounds/WinterMountain.jpg";
+import WinterMountainSmall from "./assets/backgrounds/WinterMountainSmall.jpg";
 import Meadows from "./assets/backgrounds/Meadows.jpg";
+import MeadowsSmall from "./assets/backgrounds/MeadowsSmall.jpg";
 import Timer from "./components/timer";
 import Settings from "./components/settings";
 import HelpPage from "./components/helpPage.jsx";
@@ -33,6 +41,7 @@ function App() {
     const [longBreakMinutes, setLongBreakMinutes] = useState(15);
     const [audioPlaying, setAudioPlaying] = useState("None");
     const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
+    const [imageLoaded, setImageLoaded] = useState(false);
     const [themeIndex, setThemeIndex] = useState(0);
 
     // Audio Definitions
@@ -43,16 +52,44 @@ function App() {
     const rainAudio = useRef(new Audio(rainAudioLoop), []);
 
     // Themes
-    const backgrounds = [
-        { name: " Japanese Home", image: JapaneseHome },
-        { name: " Meadows", image: Meadows },
-        { name: " Desert Sunset", image: DesertSunset },
-        { name: " Mountain Sunrise", image: MountainSunrise },
-        { name: " Rain Forest", image: RainForest },
-        { name: " Shibuya", image: Shibuya },
-        { name: " Winter Forest", image: WinterForest },
-        { name: " Winter Mountain", image: WinterMountain },
-    ];
+    const backgrounds = useMemo(
+        () => [
+            {
+                name: " Japanese Home",
+                image: JapaneseHome,
+                smallImage: JapaneseHomeSmall,
+            },
+            { name: " Meadows", image: Meadows, smallImage: MeadowsSmall },
+            {
+                name: " Desert Sunset",
+                image: DesertSunset,
+                smallImage: DesertSunsetSmall,
+            },
+            {
+                name: " Mountain Sunrise",
+                image: MountainSunrise,
+                smallImage: MountainSunriseSmall,
+            },
+            {
+                name: " Rain Forest",
+                image: RainForest,
+                smallImage: RainForestSmall,
+            },
+            { name: " Shibuya", image: Shibuya, smallImage: ShibuyaSmall },
+            {
+                name: " Winter Forest",
+                image: WinterForest,
+                smallImage: WinterForestSmall,
+            },
+            {
+                name: " Winter Mountain",
+                image: WinterMountain,
+                smallImage: WinterMountainSmall,
+            },
+        ],
+
+        []
+    );
 
     // Theme Definitions
     const themes = [
@@ -78,6 +115,17 @@ function App() {
 
     // Web Worker
     const timerWorker = useRef(new Worker(timerWorkerScript), []);
+
+    // Image Loading Handler
+    useEffect(() => {
+        setImageLoaded(false);
+        const img = new Image();
+        img.src = backgrounds[backgroundImageIndex].image;
+        img.alt = backgrounds[backgroundImageIndex].name;
+        img.onload = () => {
+            setImageLoaded(true);
+        };
+    }, [backgroundImageIndex, backgrounds]);
 
     // Ambient Sounds Handling
     useEffect(() => {
@@ -197,7 +245,10 @@ function App() {
                         "flex flex-col justify-center items-center h-full  bg-no-repeat bg-cover bg-center"
                     }
                     style={{
-                        backgroundImage: `url(${backgrounds[backgroundImageIndex].image})`,
+                        backgroundImage: imageLoaded
+                            ? `url(${backgrounds[backgroundImageIndex].image})`
+                            : `url(${backgrounds[backgroundImageIndex].smallImage}`,
+                        backdropFilter: imageLoaded ? "none" : `blur(16px)`,
                     }}
                 >
                     {activePage === "Settings" ? <Settings /> : null}
@@ -205,7 +256,6 @@ function App() {
                     {activePage === "Timer" ? <Timer /> : null}
                 </div>
             </SettingsContent.Provider>
-            <Analytics />
         </div>
     );
 }

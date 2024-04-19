@@ -38,6 +38,17 @@ function Timer() {
         };
     });
 
+    // For Showing Timer in Tab Info
+    useEffect(() => {
+        if (settings.showTabTimer === true) {
+            console.log("Show Tab Timer is on");
+            document.title = `${minutesRemaining}:${secondsRemaining}`;
+        } else {
+            console.log("Show Tab Timer is off");
+            document.title = "CozyStudy";
+        }
+    }, [settings.showTabTimer, minutesRemaining, secondsRemaining]);
+
     //  Progress Bar Value Update
     useEffect(() => {
         let calculatedProgressBarValue =
@@ -47,15 +58,6 @@ function Timer() {
 
         setProgressBarValue(calculatedProgressBarValue);
     }, [minutesRemaining, secondsRemaining, progressBarTotal]);
-
-    // For Showing Timer in Tab Info
-    useEffect(() => {
-        if (settings.showTabTimer) {
-            document.title = `${minutesRemaining}:${secondsRemaining}`;
-        } else {
-            document.title = "CozyStudy";
-        }
-    }, [settings.showTabTimer, minutesRemaining, secondsRemaining]);
 
     // Timer Count set from Break Handling and Settings change
     useEffect(() => {
