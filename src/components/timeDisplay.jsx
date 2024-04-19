@@ -1,4 +1,10 @@
+import SettingsContent from "./settingsContent";
+import { useContext } from "react";
+
 const TimeDisplay = ({ minutes, seconds }) => {
+    // Setting Context used
+    const settings = useContext(SettingsContent);
+
     // Formatting Function Used for Timer
     const formattingCheck = (minutes, seconds) => {
         let timerMinutes;
@@ -26,7 +32,12 @@ const TimeDisplay = ({ minutes, seconds }) => {
     const time = formattingCheck(minutes, seconds);
 
     return (
-        <p className="sm:text-9xl text-center text-8xl m-1 select-none">
+        <p
+            className="sm:text-9xl text-center text-8xl m-1 select-none opacity-100"
+            style={{
+                color: `${settings.themes[settings.themeIndex].timerTextColor}`,
+            }}
+        >
             {time}
         </p>
     );

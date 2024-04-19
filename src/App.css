@@ -1,31 +1,39 @@
+.topBarButton {
+    color: #d4d4d8;
+}
+
+.topBarButton:hover {
+    color: #a1a1aa;
+}
+
 .moonButton {
-	color: #475569;
+    color: #475569;
 }
 
 .moonButton:hover {
-	color: #5b21b6;
+    color: #f7e877;
 }
 
 .fireButton {
-	color: #475569;
+    color: #475569;
 }
 
 .fireButton:hover {
-	color: #ea580c;
+    color: #ea580c;
 }
 
 .windButton {
-	color: #475569;
+    color: #475569;
 }
 
 .windButton:hover {
-	color: #15803d;
+    color: #1db957;
 }
 
 .rainButton {
-	color: #475569;
+    color: #475569;
 }
 
 .rainButton:hover {
-	color: #2563eb;
+    color: #2563eb;
 }
