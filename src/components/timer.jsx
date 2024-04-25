@@ -41,10 +41,8 @@ function Timer() {
     // For Showing Timer in Tab Info
     useEffect(() => {
         if (settings.showTabTimer === true) {
-            console.log("Show Tab Timer is on");
             document.title = `${minutesRemaining}:${secondsRemaining}`;
         } else {
-            console.log("Show Tab Timer is off");
             document.title = "CozyStudy";
         }
     }, [settings.showTabTimer, minutesRemaining, secondsRemaining]);

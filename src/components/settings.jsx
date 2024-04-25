@@ -24,7 +24,7 @@ const Settings = () => {
             }}
         >
             <h1 className="text-3xl font-semibold text-center select-none">
-                Here are the settings!
+                User Settings:
             </h1>
             <div className="flex flex-row space-x-2 sm:text-2xl items-center justify-center  w-full">
                 <HiOutlineMinusCircle

@@ -30,6 +30,7 @@ import Settings from "./components/settings";
 import HelpPage from "./components/helpPage.jsx";
 import SettingsContent from "./components/settingsContent";
 import timerWorkerScript from "./scripts/timerWorker.js";
+import AdSense from "./components/adsense.jsx";
 
 function App() {
     // States
@@ -97,18 +98,21 @@ function App() {
             name: " Default",
             timerColor: "#e2e8f0",
             timerTextColor: "#1e293b",
+            textColorHover: "hover:text-gray-400",
             buttonProgressColor: "#60a5fa",
         },
         {
             name: " Coffee",
             timerColor: "#fef3c7",
             timerTextColor: "#1e293b",
+            textColorHover: "hover:text-gray-400",
             buttonProgressColor: "#92400e",
         },
         {
             name: " Indigo",
             timerColor: "#a5b4fc",
             timerTextColor: "#f8fafc",
+            textColorHover: "hover:text-gray-300",
             buttonProgressColor: "#6366f1",
         },
     ];
@@ -171,7 +175,7 @@ function App() {
     }, [audioPlaying, fireAudio, windAudio, rainAudio]);
 
     return (
-        <div className=" h-screen w-screen overscroll-none ">
+        <div className=" h-screen w-screen overscroll-none">
             <SettingsContent.Provider
                 value={{
                     showTabTimer,
@@ -200,7 +204,7 @@ function App() {
                     setThemeIndex,
                 }}
             >
-                <div className=" flex flex-row justify-end top-0 absolute w-full ">
+                <div className="flex flex-row justify-end top-0 absolute w-full h-fit ">
                     <IconContext.Provider value={{ className: "topBarButton" }}>
                         <PiQuestionLight
                             className="size-12"
@@ -242,7 +246,7 @@ function App() {
                 </div>
                 <div
                     className={
-                        "flex flex-col justify-center items-center h-full  bg-no-repeat bg-cover bg-center"
+                        "flex flex-col justify-center items-center bg-no-repeat bg-cover bg-center h-full"
                     }
                     style={{
                         backgroundImage: imageLoaded
@@ -254,8 +258,10 @@ function App() {
                     {activePage === "Settings" ? <Settings /> : null}
                     {activePage === "HelpPage" ? <HelpPage /> : null}
                     {activePage === "Timer" ? <Timer /> : null}
+                    <AdSense dataAdSlot={9397197964} />
                 </div>
             </SettingsContent.Provider>
+
             <Analytics />
         </div>
     );
