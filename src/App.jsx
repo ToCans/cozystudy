@@ -29,8 +29,9 @@ import Timer from "./components/timer";
 import Settings from "./components/settings";
 import HelpPage from "./components/helpPage.jsx";
 import SettingsContent from "./components/settingsContent";
-import timerWorkerScript from "./scripts/timerWorker.js";
 import AdSense from "./components/adsense.jsx";
+import Notification from "./components/notification.jsx";
+import timerWorkerScript from "./scripts/timerWorker.js";
 
 function App() {
     // States
@@ -44,6 +45,7 @@ function App() {
     const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
     const [imageLoaded, setImageLoaded] = useState(false);
     const [themeIndex, setThemeIndex] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
 
     // Audio Definitions
     const breakFinishAudio = useRef(new Audio(breakFinishAudioClip), []);
@@ -174,6 +176,13 @@ function App() {
         }
     }, [audioPlaying, fireAudio, windAudio, rainAudio]);
 
+    // Checking for Mobile Usage
+    useEffect(() => {
+        const userAgent = navigator.userAgent.toLowerCase();
+        console.log(userAgent);
+        setIsMobile(/iphone|ipad|android/.test(userAgent));
+    }, []);
+
     return (
         <div className=" h-screen w-screen overscroll-none">
             <SettingsContent.Provider
@@ -194,6 +203,7 @@ function App() {
                     themeIndex,
                     backgrounds,
                     themes,
+                    isMobile,
                     setTabTimer,
                     setWorkingMinutes,
                     setShortBreakMinutes,
@@ -202,52 +212,59 @@ function App() {
                     setAudioPlaying,
                     setBackgroundImageIndex,
                     setThemeIndex,
+                    setIsMobile,
                 }}
             >
-                <div className="flex flex-row justify-end top-0 absolute w-full h-fit ">
-                    <IconContext.Provider value={{ className: "topBarButton" }}>
-                        <PiQuestionLight
-                            className="size-12"
-                            alt="Question Mark Icon for Questions"
-                            onClick={() => {
-                                if (activePage !== "HelpPage") {
-                                    setActivePage("HelpPage");
-                                } else {
-                                    setActivePage("Timer");
-                                }
+                <div className="flex flex-col top-0 absolute w-full h-fit">
+                    <div className="flex flex-row justify-end">
+                        <IconContext.Provider
+                            value={{ className: "topBarButton" }}
+                        >
+                            <PiQuestionLight
+                                className="size-12"
+                                alt="Question Mark Icon for Questions"
+                                onClick={() => {
+                                    if (activePage !== "HelpPage") {
+                                        setActivePage("HelpPage");
+                                    } else {
+                                        setActivePage("Timer");
+                                    }
 
-                                timerWorker.current.postMessage({
-                                    timerRunning: false,
-                                    minutesRemaining: null,
-                                    secondsRemaining: null,
-                                });
-                            }}
-                        />
-                    </IconContext.Provider>
-                    <IconContext.Provider value={{ className: "topBarButton" }}>
-                        <PiGearLight
-                            className="size-12 "
-                            alt="Gear Icon for Settings"
-                            onClick={() => {
-                                if (activePage !== "Settings") {
-                                    setActivePage("Settings");
-                                } else {
-                                    setActivePage("Timer");
-                                }
+                                    timerWorker.current.postMessage({
+                                        timerRunning: false,
+                                        minutesRemaining: null,
+                                        secondsRemaining: null,
+                                    });
+                                }}
+                            />
+                        </IconContext.Provider>
+                        <IconContext.Provider
+                            value={{ className: "topBarButton" }}
+                        >
+                            <PiGearLight
+                                className="size-12 "
+                                alt="Gear Icon for Settings"
+                                onClick={() => {
+                                    if (activePage !== "Settings") {
+                                        setActivePage("Settings");
+                                    } else {
+                                        setActivePage("Timer");
+                                    }
 
-                                timerWorker.current.postMessage({
-                                    timerRunning: false,
-                                    minutesRemaining: null,
-                                    secondsRemaining: null,
-                                });
-                            }}
-                        />
-                    </IconContext.Provider>
+                                    timerWorker.current.postMessage({
+                                        timerRunning: false,
+                                        minutesRemaining: null,
+                                        secondsRemaining: null,
+                                    });
+                                }}
+                            />
+                        </IconContext.Provider>
+                    </div>
+                    {isMobile === true ? <Notification /> : null}
                 </div>
+
                 <div
-                    className={
-                        "flex flex-col justify-center items-center bg-no-repeat bg-cover bg-center h-full"
-                    }
+                    className={"bg-no-repeat bg-cover bg-center h-full"}
                     style={{
                         backgroundImage: imageLoaded
                             ? `url(${backgrounds[backgroundImageIndex].image})`
@@ -255,13 +272,13 @@ function App() {
                         backdropFilter: imageLoaded ? "none" : `blur(16px)`,
                     }}
                 >
-                    {activePage === "Settings" ? <Settings /> : null}
-                    {activePage === "HelpPage" ? <HelpPage /> : null}
-                    {activePage === "Timer" ? <Timer /> : null}
-                    <AdSense dataAdSlot={9397197964} />
+                    <div className="flex flex-col justify-center items-center w-full h-full">
+                        {activePage === "Settings" ? <Settings /> : null}
+                        {activePage === "HelpPage" ? <HelpPage /> : null}
+                        {activePage === "Timer" ? <Timer /> : null}
+                    </div>
                 </div>
             </SettingsContent.Provider>
-
             <Analytics />
         </div>
     );

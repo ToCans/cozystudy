@@ -37,3 +37,11 @@
 .rainButton:hover {
     color: #2563eb;
 }
+
+.closeButton {
+    color: #475569;
+}
+
+.closeButton:hover {
+    color: #2563eb;
+}
