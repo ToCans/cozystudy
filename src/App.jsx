@@ -1,5 +1,4 @@
 import "./index.css";
-import "./App.css";
 import { Analytics } from "@vercel/analytics/react";
 import { PiGearLight, PiQuestionLight } from "react-icons/pi";
 import { IconContext } from "react-icons";
