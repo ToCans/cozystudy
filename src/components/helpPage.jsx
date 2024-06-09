@@ -1,8 +1,8 @@
-import SettingsContent from "./settingsContent";
-import { useContext } from "react";
+import SettingsContent from "./settingsContent"
+import { useContext } from "react"
 
 const HelpPage = () => {
-    const settings = useContext(SettingsContent);
+    const settings = useContext(SettingsContent)
 
     return (
         <div
@@ -45,17 +45,6 @@ const HelpPage = () => {
                     }}
                 >
                     <p className="text-xl">Images from:</p>
-                    <li>
-                        <a
-                            href="https://unsplash.com/@m_d_adventures"
-                            className={
-                                settings.themes[settings.themeIndex]
-                                    .textColorHover
-                            }
-                        >
-                            Matej Dhra
-                        </a>
-                    </li>
                     <li>
                         <a
                             href="https://unsplash.com/@alexdeloy"
@@ -111,32 +100,10 @@ const HelpPage = () => {
                             Joyce G
                         </a>
                     </li>
-                    <li>
-                        <a
-                            href="https://unsplash.com/@joshuakettle"
-                            className={
-                                settings.themes[settings.themeIndex]
-                                    .textColorHover
-                            }
-                        >
-                            Joshua Kettle
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="https://unsplash.com/@beckerworks"
-                            className={
-                                settings.themes[settings.themeIndex]
-                                    .textColorHover
-                            }
-                        >
-                            David Becker
-                        </a>
-                    </li>
                 </ul>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default HelpPage;
+export default HelpPage
