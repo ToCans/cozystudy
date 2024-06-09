@@ -3,7 +3,7 @@ import TimeDisplay from "./timeDisplay"
 import ProgressBar from "./progressBar"
 import InteractiveButton from "./timeButton"
 import SettingsContent from "./settingsContent"
-import SoundButton from "./soundButton"
+import SoundButtonRow from "./soundButtonRow"
 
 function Timer() {
     const settings = useContext(SettingsContent)
@@ -14,30 +14,6 @@ function Timer() {
     const progressBarTotalRef = useRef(settings.workingMinutes * 60)
     const minutesRemainingRef = useRef(minutesRemaining)
     const secondsRemainingRef = useRef(secondsRemaining)
-
-    // Time formatting function
-    const formatTime = (minutes, seconds) => {
-        let timerMinutes
-        let timerSeconds
-        let timerDisplay
-
-        // Timer Display
-        if (minutes < 10) {
-            timerMinutes = `0${minutes}`
-        } else {
-            timerMinutes = minutes
-        }
-
-        if (seconds < 10) {
-            timerSeconds = `0${seconds}`
-        } else {
-            timerSeconds = seconds
-        }
-
-        timerDisplay = `${timerMinutes}:${timerSeconds}`
-
-        return timerDisplay
-    }
 
     // Running Timer from Web Worker
     useEffect(() => {
@@ -62,11 +38,14 @@ function Timer() {
     // For Showing Timer in Tab Info
     useEffect(() => {
         if (settings.showTabTimer === true) {
-            document.title = `${formatTime(minutesRemaining, secondsRemaining)} - CozyStudy`
+            document.title = `${settings.formatTime(
+                minutesRemaining,
+                secondsRemaining
+            )} - CozyStudy`
         } else {
             document.title = "CozyStudy"
         }
-    }, [settings.showTabTimer, minutesRemaining, secondsRemaining])
+    }, [minutesRemaining, secondsRemaining, settings])
 
     // Progress Bar Value Update
     useEffect(() => {
@@ -122,7 +101,7 @@ function Timer() {
             <TimeDisplay
                 minutes={minutesRemaining}
                 seconds={secondsRemaining}
-                formatTime={formatTime}
+                formatTime={settings.formatTime}
             />
             <ProgressBar progressBarValue={progressBarValue} />
             <div className="row flex flex-row justify-center w-full">
@@ -142,25 +121,8 @@ function Timer() {
                     secondsRemaining={secondsRemaining}
                 />
             </div>
+            <SoundButtonRow />
             <p className="sm:text-xl text-center select-none">Current Cycle: {cycleDisplay}</p>
-            <div className="row flex flex-row justify-center w-full space-x-2 m-1">
-                <SoundButton
-                    purpose="None"
-                    audioPlayingSetter={settings.setAudioPlaying}
-                />
-                <SoundButton
-                    purpose="Fire"
-                    audioPlayingSetter={settings.setAudioPlaying}
-                />
-                <SoundButton
-                    purpose="Wind"
-                    audioPlayingSetter={settings.setAudioPlaying}
-                />
-                <SoundButton
-                    purpose="Rain"
-                    audioPlayingSetter={settings.setAudioPlaying}
-                />
-            </div>
         </div>
     )
 }

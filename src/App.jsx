@@ -3,11 +3,7 @@ import { Analytics } from "@vercel/analytics/react"
 import { PiGearLight, PiQuestionLight } from "react-icons/pi"
 import { IconContext } from "react-icons"
 import { useState, useRef, useEffect, useMemo } from "react"
-import breakFinishAudioClip from "./assets/sounds/complete.mp3"
-import workFinishAudioClip from "./assets/sounds/lowHighChime.mp3"
-import campfireAudioLoop from "./assets/sounds/campfireLoop.mp3"
-import windAudioLoop from "./assets/sounds/windLoop.mp3"
-import rainAudioLoop from "./assets/sounds/rainLoop.mp3"
+
 import JapaneseHome from "./assets/backgrounds/JapaneseHome.jpg"
 import JapaneseHomeSmall from "./assets/backgrounds/JapaneseHomeSmall.jpg"
 import DesertSunset from "./assets/backgrounds/DesertSunset.jpg"
@@ -25,6 +21,11 @@ import HelpPage from "./components/helpPage.jsx"
 import SettingsContent from "./components/settingsContent"
 import Notification from "./components/notification.jsx"
 import timerWorkerScript from "./scripts/timerWorker.js"
+import breakFinishAudioClip from "./assets/sounds/complete.mp3"
+import workFinishAudioClip from "./assets/sounds/lowHighChime.mp3"
+import campfireAudioLoop from "./assets/sounds/campfireLoop.mp3"
+import windAudioLoop from "./assets/sounds/windLoop.mp3"
+import rainAudioLoop from "./assets/sounds/rainLoop.mp3"
 
 function App() {
     // States
@@ -34,18 +35,32 @@ function App() {
     const [workingMinutes, setWorkingMinutes] = useState(25)
     const [shortBreakMinutes, setShortBreakMinutes] = useState(5)
     const [longBreakMinutes, setLongBreakMinutes] = useState(15)
-    const [audioPlaying, setAudioPlaying] = useState("None")
     const [backgroundImageIndex, setBackgroundImageIndex] = useState(0)
     const [imageLoaded, setImageLoaded] = useState(false)
     const [themeIndex, setThemeIndex] = useState(0)
     const [isMobile, setIsMobile] = useState(false)
 
-    // Audio Definitions
-    const breakFinishAudio = useRef(new Audio(breakFinishAudioClip), [])
-    const workFinishAudio = useRef(new Audio(workFinishAudioClip), [])
-    const fireAudio = useRef(new Audio(campfireAudioLoop), [])
-    const windAudio = useRef(new Audio(windAudioLoop), [])
-    const rainAudio = useRef(new Audio(rainAudioLoop), [])
+    // Audio and Webworker Definitions
+    const breakFinishAudio = useRef(null)
+    const workFinishAudio = useRef(null)
+    const fireAudio = useRef(null)
+    const windAudio = useRef(null)
+    const rainAudio = useRef(null)
+
+    // Initialization
+    useEffect(() => {
+        timerWorker.current = new Worker(timerWorkerScript)
+        breakFinishAudio.current = new Audio(breakFinishAudioClip)
+        workFinishAudio.current = new Audio(workFinishAudioClip)
+        fireAudio.current = new Audio(campfireAudioLoop)
+        windAudio.current = new Audio(windAudioLoop)
+        rainAudio.current = new Audio(rainAudioLoop)
+
+        // Cleanup function to terminate the worker when the component unmounts
+        return () => {
+            timerWorker.current.terminate()
+        }
+    }, [])
 
     // References
     const timerWorker = useRef(null)
@@ -118,16 +133,29 @@ function App() {
         },
     ]
 
-    // Webworker Initialization
-    useEffect(() => {
-        console.log("Timer Worker Setup")
-        timerWorker.current = new Worker(timerWorkerScript)
+    // Time formatting function
+    const formatTime = (minutes, seconds) => {
+        let timerMinutes
+        let timerSeconds
+        let timerDisplay
 
-        // Cleanup function to terminate the worker when the component unmounts
-        return () => {
-            timerWorker.current.terminate()
+        // Timer Display
+        if (minutes < 10) {
+            timerMinutes = `0${minutes}`
+        } else {
+            timerMinutes = minutes
         }
-    }, [])
+
+        if (seconds < 10) {
+            timerSeconds = `0${seconds}`
+        } else {
+            timerSeconds = seconds
+        }
+
+        timerDisplay = `${timerMinutes}:${timerSeconds}`
+
+        return timerDisplay
+    }
 
     // Image Loading Handler
     useEffect(() => {
@@ -140,53 +168,9 @@ function App() {
         }
     }, [backgroundImageIndex, backgrounds])
 
-    // Ambient Sounds Handling
-    useEffect(() => {
-        // Stopping Audio Function
-        const stopAllAudio = () => {
-            // Fire Audio Off
-            fireAudio.current.pause()
-            fireAudio.current.currentTime = 0
-            // Wind Audio Off
-            windAudio.current.pause()
-            windAudio.current.currentTime = 0
-            // Rain Audio Off
-            rainAudio.current.pause()
-            rainAudio.current.currentTime = 0
-        }
-
-        function loopAudio() {
-            var buffer = 0.35
-            if (this.currentTime > this.duration - buffer) {
-                this.currentTime = 0
-                this.play()
-            }
-        }
-
-        if (audioPlaying === "Fire") {
-            stopAllAudio()
-            fireAudio.current.volume = 0.75
-            fireAudio.current.play()
-            fireAudio.current.addEventListener("timeupdate", loopAudio, false)
-        } else if (audioPlaying === "Wind") {
-            stopAllAudio()
-            windAudio.current.play()
-            windAudio.current.volume = 0.7
-            windAudio.current.addEventListener("timeupdate", loopAudio, false)
-        } else if (audioPlaying === "Rain") {
-            stopAllAudio()
-            rainAudio.current.volume = 0.5
-            rainAudio.current.play()
-            rainAudio.current.addEventListener("timeupdate", loopAudio, false)
-        } else {
-            stopAllAudio()
-        }
-    }, [audioPlaying, fireAudio, windAudio, rainAudio])
-
     // Checking for Mobile Usage
     useEffect(() => {
         const userAgent = navigator.userAgent.toLowerCase()
-        console.log(userAgent)
         setIsMobile(/iphone|ipad|android/.test(userAgent))
     }, [])
 
@@ -205,18 +189,17 @@ function App() {
                     fireAudio,
                     windAudio,
                     rainAudio,
-                    audioPlaying,
                     backgroundImageIndex,
                     themeIndex,
                     backgrounds,
                     themes,
                     isMobile,
+                    formatTime,
                     setTabTimer,
                     setWorkingMinutes,
                     setShortBreakMinutes,
                     setLongBreakMinutes,
                     setCycleNumber,
-                    setAudioPlaying,
                     setBackgroundImageIndex,
                     setThemeIndex,
                     setIsMobile,

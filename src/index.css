@@ -40,9 +40,6 @@ code {
     color: #ea580c;
 }
 
-.windButton {
-    color: #475569;
-}
 
 .windButton:hover {
     color: #1db957;
@@ -53,7 +50,7 @@ code {
 }
 
 .rainButton:hover {
-    color: #2563eb;
+    color: #60a5fa;
 }
 
 .closeButton {
