@@ -78,7 +78,11 @@ function Timer() {
 
     // End of Cycle Sound Handling
     useEffect(() => {
-        if (minutesRemainingRef.current === 0 && secondsRemainingRef.current === 0) {
+        if (
+            minutesRemainingRef.current === 0 &&
+            secondsRemainingRef.current === 0 &&
+            timerRunning === true
+        ) {
             if (settings.cycleNumber % 2 === 0) {
                 settings.breakFinishAudio.current.volume = 0.5
                 settings.breakFinishAudio.current.play()
