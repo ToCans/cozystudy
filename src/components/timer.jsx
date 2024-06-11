@@ -7,6 +7,7 @@ import SoundButtonRow from "./soundButtonRow"
 
 function Timer() {
     const settings = useContext(SettingsContent)
+    // eslint-disable-next-line
     const [timerRunning, setTimerRunning] = useState(false)
     const [minutesRemaining, setMinutesRemaining] = useState(settings.workingMinutes)
     const [secondsRemaining, setSecondsRemaining] = useState(0)
@@ -24,6 +25,13 @@ function Timer() {
         settings.timerWorker.current.onmessage = (e) => {
             if (e.data.minutesRemaining === 0 && e.data.secondsRemaining === -1) {
                 setTimerRunning(false)
+                if (settings.cycleNumber % 2 === 0) {
+                    settings.breakFinishAudio.current.volume = 0.5
+                    settings.breakFinishAudio.current.play()
+                } else {
+                    settings.workFinishAudio.current.volume = 0.5
+                    settings.workFinishAudio.current.play()
+                }
                 settings.setCycleNumber(settings.cycleNumber + 1)
             } else {
                 //setTimerRunning(true)
@@ -77,6 +85,7 @@ function Timer() {
     ])
 
     // End of Cycle Sound Handling
+    /*
     useEffect(() => {
         if (
             minutesRemainingRef.current === 0 &&
@@ -92,7 +101,7 @@ function Timer() {
             }
         }
     }, [timerRunning, settings.cycleNumber, settings.breakFinishAudio, settings.workFinishAudio])
-
+    */
     let cycleDisplay = Math.ceil(settings.cycleNumber / 2)
 
     return (
