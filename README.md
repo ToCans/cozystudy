@@ -1,32 +1,38 @@
-# Cozy Study App
+# CozyStudy App
 
-CozyStudy offers the users an all-in-one experience of a pomodoro timer, background audio, and pleasant backgrounds.
+### CozyStudy Preview
+
+<div style="padding: 10px; margin: 20px; text-align: center;">
+  <img src="./src/assets/snapshots/desktopSnapshot1.png" alt="Desktop View" style="width: 300px; margin: 10px;">
+  <img src="./src/assets/snapshots/desktopSnapshot2.png" alt="Desktop View" style="width: 300px; margin: 10px;">
+  <img src="./src/assets/snapshots/desktopSnapshot3.png" alt="Desktop View" style="width: 300px; margin: 10px;">
+</div>
 
 ---
 
-## React Commands:
+### What does CozyStudy offers
 
-## Available Scripts
+CozyStudy is an elevated pomordoro timer that offers users a customized experience for productivity.
 
-### `npm start`
+Like the typical pomodoro study technique, this app offers additional settings for the length of study and rest, color themes, and backgrounds.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Campfire, Wind, and Rain ambient noises such as are available as well.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+---
 
-### `npm test`
+### Tech Stack is used
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+CozyStudy uses a React Frontend Framework with TailwindCSS styling.
 
-### `npm run build`
+---
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Where to find CozyStudy
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+https://www.cozystudy.xyz/
+https://cozystudy.vercel.app/
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+---
+
+### Further improvements
+
+Mobile app planned...
