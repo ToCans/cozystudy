@@ -3,9 +3,9 @@
 ### CozyStudy Preview
 
 <div style="padding: 10px; margin: 20px; text-align: center;">
-  <img src="./src/assets/snapshots/desktopSnapshot1.png" alt="Desktop View" style="width: 300px; margin: 10px;">
-  <img src="./src/assets/snapshots/desktopSnapshot2.png" alt="Desktop View" style="width: 300px; margin: 10px;">
-  <img src="./src/assets/snapshots/desktopSnapshot3.png" alt="Desktop View" style="width: 300px; margin: 10px;">
+  <img src="./src/assets/snapshots/desktopSnapshot1.png" alt="Desktop View" style="width: 200px; margin: 10px;">
+  <img src="./src/assets/snapshots/desktopSnapshot2.png" alt="Desktop View" style="width: 200px; margin: 10px;">
+  <img src="./src/assets/snapshots/desktopSnapshot3.png" alt="Desktop View" style="width: 200px; margin: 10px;">
 </div>
 
 ---
@@ -29,6 +29,7 @@ CozyStudy uses a React Frontend Framework with TailwindCSS styling.
 ### Where to find CozyStudy
 
 https://www.cozystudy.xyz/
+<br>
 https://cozystudy.vercel.app/
 
 ---
