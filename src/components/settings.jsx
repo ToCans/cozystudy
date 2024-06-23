@@ -16,6 +16,24 @@ const Settings = () => {
         settings.setTabTimer(!settings.showTabTimer)
     }
 
+    // Handling for when the user changes any of the settings
+    useEffect(() => {
+        console.log("Saving settings to local storage")
+        localStorage.setItem("showTabTimer", JSON.stringify(settings.showTabTimer))
+        localStorage.setItem("workingMinutes", JSON.stringify(settings.workingMinutes))
+        localStorage.setItem("shortBreakMinutes", JSON.stringify(settings.shortBreakMinutes))
+        localStorage.setItem("longBreakMinutes", JSON.stringify(settings.longBreakMinutes))
+        localStorage.setItem("backgroundImageIndex", JSON.stringify(settings.backgroundImageIndex))
+        localStorage.setItem("themeIndex", JSON.stringify(settings.themeIndex))
+    }, [
+        settings.showTabTimer,
+        settings.workingMinutes,
+        settings.shortBreakMinutes,
+        settings.longBreakMinutes,
+        settings.backgroundImageIndex,
+        settings.themeIndex,
+    ])
+
     // For Showing Timer in Tab Info
     useEffect(() => {
         let minutes

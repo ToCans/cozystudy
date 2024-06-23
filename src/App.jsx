@@ -1,288 +1,336 @@
-import "./index.css";
-import { Analytics } from "@vercel/analytics/react";
-import { PiGearLight, PiQuestionLight } from "react-icons/pi";
-import { IconContext } from "react-icons";
-import { useState, useRef, useEffect, useMemo } from "react";
+import "./index.css"
+import { Analytics } from "@vercel/analytics/react"
+import { PiGearLight, PiQuestionLight, PiChartBarLight } from "react-icons/pi"
+import { IconContext } from "react-icons"
+import { useState, useRef, useEffect, useMemo } from "react"
 
-import JapaneseHome from "./assets/backgrounds/JapaneseHome.jpg";
-import JapaneseHomeSmall from "./assets/backgrounds/JapaneseHomeSmall.jpg";
-import DesertSunset from "./assets/backgrounds/DesertSunset.jpg";
-import DesertSunsetSmall from "./assets/backgrounds/DesertSunsetSmall.jpg";
-import Shibuya from "./assets/backgrounds/Shibuya.jpg";
-import ShibuyaSmall from "./assets/backgrounds/ShibuyaSmall.jpg";
-import WinterForest from "./assets/backgrounds/WinterForest.jpg";
-import WinterForestSmall from "./assets/backgrounds/WinterForestSmall.jpg";
-import WinterMountain from "./assets/backgrounds/WinterMountain.jpg";
-import WinterMountainSmall from "./assets/backgrounds/WinterMountainSmall.jpg";
-import Timer from "./components/timer";
-import PhotoCredit from "./components/photoCredit.jsx";
-import Settings from "./components/settings";
-import HelpPage from "./components/helpPage.jsx";
-import SettingsContent from "./components/settingsContent";
-import Notification from "./components/notification.jsx";
-import timerWorkerScript from "./scripts/timerWorker.js";
-import breakFinishAudioClip from "./assets/sounds/complete.mp3";
-import workFinishAudioClip from "./assets/sounds/lowHighChime.mp3";
-import campfireAudioLoop from "./assets/sounds/campfireLoop.mp3";
-import windAudioLoop from "./assets/sounds/windLoop.mp3";
-import rainAudioLoop from "./assets/sounds/rainLoop.mp3";
+import JapaneseHome from "./assets/backgrounds/JapaneseHome.jpg"
+import JapaneseHomeSmall from "./assets/backgrounds/JapaneseHomeSmall.jpg"
+import DesertSunset from "./assets/backgrounds/DesertSunset.jpg"
+import DesertSunsetSmall from "./assets/backgrounds/DesertSunsetSmall.jpg"
+import Shibuya from "./assets/backgrounds/Shibuya.jpg"
+import ShibuyaSmall from "./assets/backgrounds/ShibuyaSmall.jpg"
+import WinterForest from "./assets/backgrounds/WinterForest.jpg"
+import WinterForestSmall from "./assets/backgrounds/WinterForestSmall.jpg"
+import WinterMountain from "./assets/backgrounds/WinterMountain.jpg"
+import WinterMountainSmall from "./assets/backgrounds/WinterMountainSmall.jpg"
+import Timer from "./components/timer"
+import PhotoCredit from "./components/photoCredit.jsx"
+import Settings from "./components/settings"
+import StatsPage from "./components/statsPage.jsx"
+import HelpPage from "./components/helpPage.jsx"
+import SettingsContent from "./components/settingsContent"
+import Notification from "./components/notification.jsx"
+import timerWorkerScript from "./scripts/timerWorker.js"
+import breakFinishAudioClip from "./assets/sounds/complete.mp3"
+import workFinishAudioClip from "./assets/sounds/lowHighChime.mp3"
+import campfireAudioLoop from "./assets/sounds/campfireLoop.mp3"
+import windAudioLoop from "./assets/sounds/windLoop.mp3"
+import rainAudioLoop from "./assets/sounds/rainLoop.mp3"
 
 function App() {
-	// States
-	const [activePage, setActivePage] = useState("Timer");
-	const [showTabTimer, setTabTimer] = useState(true);
-	const [cycleNumber, setCycleNumber] = useState(1);
-	const [workingMinutes, setWorkingMinutes] = useState(25);
-	const [shortBreakMinutes, setShortBreakMinutes] = useState(5);
-	const [longBreakMinutes, setLongBreakMinutes] = useState(15);
-	const [backgroundImageIndex, setBackgroundImageIndex] = useState(0);
-	const [imageLoaded, setImageLoaded] = useState(false);
-	const [themeIndex, setThemeIndex] = useState(0);
-	const [isMobile, setIsMobile] = useState(false);
+    // Default States
+    const [activePage, setActivePage] = useState("Timer")
+    const [cycleNumber, setCycleNumber] = useState(1)
+    const [imageLoaded, setImageLoaded] = useState(false)
+    const [isMobile, setIsMobile] = useState(false)
 
-	// Refernces for cookie
-	const workingMinutesCompleted = useRef(0);
+    // Checking Local Storage Function
+    const checkLocalStorage = (checkFor, defaultValue) => {
+        const checker = localStorage.getItem(checkFor)
+        return checker !== null ? JSON.parse(checker) : defaultValue
+    }
 
-	// Audio and Webworker Definitions
-	const breakFinishAudio = useRef(null);
-	const workFinishAudio = useRef(null);
-	const fireAudio = useRef(null);
-	const windAudio = useRef(null);
-	const rainAudio = useRef(null);
+    // Local Storage States
+    const [showTabTimer, setTabTimer] = useState(() => {
+        console.log("Initializing showTabTimer state")
+        return checkLocalStorage("showTabTimer", true)
+    })
 
-	// Initialization
-	useEffect(() => {
-		timerWorker.current = new Worker(timerWorkerScript);
-		breakFinishAudio.current = new Audio(breakFinishAudioClip);
-		workFinishAudio.current = new Audio(workFinishAudioClip);
-		fireAudio.current = new Audio(campfireAudioLoop);
-		windAudio.current = new Audio(windAudioLoop);
-		rainAudio.current = new Audio(rainAudioLoop);
+    const [workingMinutes, setWorkingMinutes] = useState(() => {
+        console.log("Initializing workingMinutes state")
+        return checkLocalStorage("workingMinutes", 25)
+    })
 
-		// Cleanup function to terminate the worker when the component unmounts
-		return () => {
-			timerWorker.current.terminate();
-		};
-	}, []);
+    const [shortBreakMinutes, setShortBreakMinutes] = useState(() => {
+        console.log("Initializing shortBreakMinutes state")
+        return checkLocalStorage("shortBreakMinutes", 5)
+    })
 
-	// References
-	const timerWorker = useRef(null);
+    const [longBreakMinutes, setLongBreakMinutes] = useState(() => {
+        console.log("Initializing longBreakMinutes state")
+        return checkLocalStorage("longBreakMinutes", 15)
+    })
 
-	// Themes
-	const backgrounds = useMemo(
-		() => [
-			{
-				name: " Shibuya",
-				image: Shibuya,
-				smallImage: ShibuyaSmall,
-				photographer: "Mos Design",
-				portfolio: "https://unsplash.com/@mosdesign",
-			},
-			{
-				name: " Winter Mountain",
-				image: WinterMountain,
-				smallImage: WinterMountainSmall,
-				photographer: "EberHard Grossgasteiger",
-				portfolio: "https://unsplash.com/@eberhardgross",
-			},
-			{
-				name: " Japanese Home",
-				image: JapaneseHome,
-				smallImage: JapaneseHomeSmall,
-				photographer: "Marek Okon",
-				portfolio: "https://unsplash.com/@marekokon",
-			},
+    const [backgroundImageIndex, setBackgroundImageIndex] = useState(() => {
+        console.log("Initializing backgroundImageIndex state")
+        return checkLocalStorage("backgroundImageIndex", 0)
+    })
 
-			{
-				name: " Desert Sunset",
-				image: DesertSunset,
-				smallImage: DesertSunsetSmall,
-				photographer: "Alexander Psiuk",
-				portfolio: "https://unsplash.com/@alexdeloy",
-			},
-			{
-				name: " Winter Forest",
-				image: WinterForest,
-				smallImage: WinterForestSmall,
-				photographer: "Joyce G",
-				portfolio: "https://unsplash.com/@joyce_",
-			},
-		],
-		[]
-	);
+    const [themeIndex, setThemeIndex] = useState(() => {
+        console.log("Initializing themeIndex state")
+        return checkLocalStorage("themeIndex", 0)
+    })
 
-	// Theme Definitions
-	const themes = [
-		{
-			name: " Default",
-			timerColor: "#e2e8f0",
-			timerTextColor: "#1e293b",
-			textColorHover: "hover:text-gray-400",
-			buttonProgressColor: "#60a5fa",
-		},
-		{
-			name: " Coffee",
-			timerColor: "#fef3c7",
-			timerTextColor: "#1e293b",
-			textColorHover: "hover:text-gray-400",
-			buttonProgressColor: "#92400e",
-		},
-		{
-			name: " Indigo",
-			timerColor: "#a5b4fc",
-			timerTextColor: "#f8fafc",
-			textColorHover: "hover:text-gray-300",
-			buttonProgressColor: "#6366f1",
-		},
-	];
+    // Refernces for cookies
+    const workingMinutesCompleted = useRef(0)
+    const workingCyclesCompleted = useRef(0)
 
-	// Time formatting function
-	const formatTime = (minutes, seconds) => {
-		let timerMinutes;
-		let timerSeconds;
-		let timerDisplay;
+    // Audio and Webworker Definitions
+    const breakFinishAudio = useRef(null)
+    const workFinishAudio = useRef(null)
+    const fireAudio = useRef(null)
+    const windAudio = useRef(null)
+    const rainAudio = useRef(null)
 
-		// Timer Display
-		if (minutes < 10) {
-			timerMinutes = `0${minutes}`;
-		} else {
-			timerMinutes = minutes;
-		}
+    // Initialization
+    useEffect(() => {
+        timerWorker.current = new Worker(timerWorkerScript)
+        breakFinishAudio.current = new Audio(breakFinishAudioClip)
+        workFinishAudio.current = new Audio(workFinishAudioClip)
+        fireAudio.current = new Audio(campfireAudioLoop)
+        windAudio.current = new Audio(windAudioLoop)
+        rainAudio.current = new Audio(rainAudioLoop)
 
-		if (seconds < 10) {
-			timerSeconds = `0${seconds}`;
-		} else {
-			timerSeconds = seconds;
-		}
+        // Cleanup function to terminate the worker when the component unmounts
+        return () => {
+            timerWorker.current.terminate()
+        }
+    }, [])
 
-		timerDisplay = `${timerMinutes}:${timerSeconds}`;
+    // References
+    const timerWorker = useRef(null)
 
-		return timerDisplay;
-	};
+    // Themes
+    const backgrounds = useMemo(
+        () => [
+            {
+                name: " Shibuya",
+                image: Shibuya,
+                smallImage: ShibuyaSmall,
+                photographer: "Mos Design",
+                portfolio: "https://unsplash.com/@mosdesign",
+            },
+            {
+                name: " Winter Mountain",
+                image: WinterMountain,
+                smallImage: WinterMountainSmall,
+                photographer: "EberHard Grossgasteiger",
+                portfolio: "https://unsplash.com/@eberhardgross",
+            },
+            {
+                name: " Japanese Home",
+                image: JapaneseHome,
+                smallImage: JapaneseHomeSmall,
+                photographer: "Marek Okon",
+                portfolio: "https://unsplash.com/@marekokon",
+            },
 
-	// Image Loading Handler
-	useEffect(() => {
-		setImageLoaded(false);
-		const img = new Image();
-		img.src = backgrounds[backgroundImageIndex].image;
-		img.alt = backgrounds[backgroundImageIndex].name;
-		img.onload = () => {
-			setImageLoaded(true);
-		};
-	}, [backgroundImageIndex, backgrounds]);
+            {
+                name: " Desert Sunset",
+                image: DesertSunset,
+                smallImage: DesertSunsetSmall,
+                photographer: "Alexander Psiuk",
+                portfolio: "https://unsplash.com/@alexdeloy",
+            },
+            {
+                name: " Winter Forest",
+                image: WinterForest,
+                smallImage: WinterForestSmall,
+                photographer: "Joyce G",
+                portfolio: "https://unsplash.com/@joyce_",
+            },
+        ],
+        []
+    )
 
-	// Checking for Mobile Usage
-	useEffect(() => {
-		const userAgent = navigator.userAgent.toLowerCase();
-		setIsMobile(/iphone|ipad|android/.test(userAgent));
-	}, []);
+    // Theme Definitions
+    const themes = [
+        {
+            name: " Default",
+            timerColor: "#e2e8f0",
+            timerTextColor: "#1e293b",
+            textColorHover: "hover:text-gray-400",
+            buttonProgressColor: "#60a5fa",
+        },
+        {
+            name: " Coffee",
+            timerColor: "#fef3c7",
+            timerTextColor: "#1e293b",
+            textColorHover: "hover:text-gray-400",
+            buttonProgressColor: "#92400e",
+        },
+        {
+            name: " Indigo",
+            timerColor: "#a5b4fc",
+            timerTextColor: "#f8fafc",
+            textColorHover: "hover:text-gray-300",
+            buttonProgressColor: "#6366f1",
+        },
+    ]
 
-	return (
-		<div className=" h-screen w-screen overscroll-none">
-			<SettingsContent.Provider
-				value={{
-					showTabTimer,
-					workingMinutes,
-					shortBreakMinutes,
-					longBreakMinutes,
-					cycleNumber,
-					timerWorker,
-					breakFinishAudio,
-					workFinishAudio,
-					fireAudio,
-					windAudio,
-					rainAudio,
-					backgroundImageIndex,
-					themeIndex,
-					backgrounds,
-					themes,
-					isMobile,
-					workingMinutesCompleted,
-					formatTime,
-					setTabTimer,
-					setWorkingMinutes,
-					setShortBreakMinutes,
-					setLongBreakMinutes,
-					setCycleNumber,
-					setBackgroundImageIndex,
-					setThemeIndex,
-					setIsMobile,
-				}}
-			>
-				<div className="flex flex-col top-0 absolute w-full h-fit">
-					<div className="flex flex-row justify-end">
-						<IconContext.Provider
-							value={{ className: "topBarButton" }}
-						>
-							<PiQuestionLight
-								className="size-12"
-								alt="Question Mark Icon for Questions"
-								onClick={() => {
-									if (activePage !== "HelpPage") {
-										setActivePage("HelpPage");
-									} else {
-										setActivePage("Timer");
-									}
+    // Time formatting function
+    const formatTime = (minutes, seconds) => {
+        let timerMinutes
+        let timerSeconds
+        let timerDisplay
 
-									timerWorker.current.postMessage({
-										timerRunning: false,
-										minutesRemaining: null,
-										secondsRemaining: null,
-									});
-								}}
-							/>
-						</IconContext.Provider>
-						<IconContext.Provider
-							value={{ className: "topBarButton" }}
-						>
-							<PiGearLight
-								className="size-12 "
-								alt="Gear Icon for Settings"
-								onClick={() => {
-									if (activePage !== "Settings") {
-										setActivePage("Settings");
-									} else {
-										setActivePage("Timer");
-									}
+        // Timer Display
+        if (minutes < 10) {
+            timerMinutes = `0${minutes}`
+        } else {
+            timerMinutes = minutes
+        }
 
-									timerWorker.current.postMessage({
-										timerRunning: false,
-										minutesRemaining: null,
-										secondsRemaining: null,
-									});
-								}}
-							/>
-						</IconContext.Provider>
-					</div>
-					{isMobile === true ? <Notification /> : null}
-				</div>
+        if (seconds < 10) {
+            timerSeconds = `0${seconds}`
+        } else {
+            timerSeconds = seconds
+        }
 
-				<div
-					className={"bg-no-repeat bg-cover bg-center h-full"}
-					style={{
-						backgroundImage: imageLoaded
-							? `url(${backgrounds[backgroundImageIndex].image})`
-							: `url(${backgrounds[backgroundImageIndex].smallImage}`,
-						backdropFilter: imageLoaded ? "none" : `blur(16px)`,
-					}}
-				>
-					<div className="flex flex-col justify-center items-center w-full h-full">
-						{activePage === "Settings" ? <Settings /> : null}
-						{activePage === "HelpPage" ? <HelpPage /> : null}
-						{activePage === "Timer" ? <Timer /> : null}
-					</div>
+        timerDisplay = `${timerMinutes}:${timerSeconds}`
 
-					<PhotoCredit
-						photographer={
-							backgrounds[backgroundImageIndex].photographer
-						}
-						portfolio={backgrounds[backgroundImageIndex].portfolio}
-					/>
-				</div>
-			</SettingsContent.Provider>
-			<Analytics />
-		</div>
-	);
+        return timerDisplay
+    }
+
+    // Image Loading Handler
+    useEffect(() => {
+        setImageLoaded(false)
+        const img = new Image()
+        img.src = backgrounds[backgroundImageIndex].image
+        img.alt = backgrounds[backgroundImageIndex].name
+        img.onload = () => {
+            setImageLoaded(true)
+        }
+    }, [backgroundImageIndex, backgrounds])
+
+    // Checking for Mobile Usage
+    useEffect(() => {
+        const userAgent = navigator.userAgent.toLowerCase()
+        setIsMobile(/iphone|ipad|android/.test(userAgent))
+    }, [])
+
+    return (
+        <div className=" h-screen w-screen overscroll-none">
+            <SettingsContent.Provider
+                value={{
+                    showTabTimer,
+                    workingMinutes,
+                    shortBreakMinutes,
+                    longBreakMinutes,
+                    cycleNumber,
+                    timerWorker,
+                    breakFinishAudio,
+                    workFinishAudio,
+                    fireAudio,
+                    windAudio,
+                    rainAudio,
+                    backgroundImageIndex,
+                    themeIndex,
+                    backgrounds,
+                    themes,
+                    isMobile,
+                    workingMinutesCompleted,
+                    workingCyclesCompleted,
+                    formatTime,
+                    setTabTimer,
+                    setWorkingMinutes,
+                    setShortBreakMinutes,
+                    setLongBreakMinutes,
+                    setCycleNumber,
+                    setBackgroundImageIndex,
+                    setThemeIndex,
+                    setIsMobile,
+                }}
+            >
+                <div className="flex flex-col top-0 absolute w-full h-fit">
+                    <div className="flex flex-row justify-end">
+                        <IconContext.Provider value={{ className: "topBarButton" }}>
+                            <PiQuestionLight
+                                className="size-12"
+                                alt="Question Mark Icon for Questions"
+                                onClick={() => {
+                                    if (activePage !== "HelpPage") {
+                                        setActivePage("HelpPage")
+                                    } else {
+                                        setActivePage("Timer")
+                                    }
+
+                                    timerWorker.current.postMessage({
+                                        timerRunning: false,
+                                        minutesRemaining: null,
+                                        secondsRemaining: null,
+                                    })
+                                }}
+                            />
+                        </IconContext.Provider>
+                        <IconContext.Provider value={{ className: "topBarButton" }}>
+                            <PiChartBarLight
+                                className="size-12 "
+                                alt="Chart Icon for Statistics"
+                                onClick={() => {
+                                    if (activePage !== "Stats") {
+                                        setActivePage("Stats")
+                                    } else {
+                                        setActivePage("Timer")
+                                    }
+
+                                    timerWorker.current.postMessage({
+                                        timerRunning: false,
+                                        minutesRemaining: null,
+                                        secondsRemaining: null,
+                                    })
+                                }}
+                            />
+                        </IconContext.Provider>
+                        <IconContext.Provider value={{ className: "topBarButton" }}>
+                            <PiGearLight
+                                className="size-12 "
+                                alt="Gear Icon for Settings"
+                                onClick={() => {
+                                    if (activePage !== "Settings") {
+                                        setActivePage("Settings")
+                                    } else {
+                                        setActivePage("Timer")
+                                    }
+
+                                    timerWorker.current.postMessage({
+                                        timerRunning: false,
+                                        minutesRemaining: null,
+                                        secondsRemaining: null,
+                                    })
+                                }}
+                            />
+                        </IconContext.Provider>
+                    </div>
+                    {isMobile === true ? <Notification /> : null}
+                </div>
+
+                <div
+                    className={"bg-no-repeat bg-cover bg-center h-full"}
+                    style={{
+                        backgroundImage: imageLoaded
+                            ? `url(${backgrounds[backgroundImageIndex].image})`
+                            : `url(${backgrounds[backgroundImageIndex].smallImage}`,
+                        backdropFilter: imageLoaded ? "none" : `blur(16px)`,
+                    }}
+                >
+                    <div className="flex flex-col justify-center items-center w-full h-full">
+                        {activePage === "Settings" ? <Settings /> : null}
+                        {activePage === "Stats" ? <StatsPage /> : null}
+                        {activePage === "HelpPage" ? <HelpPage /> : null}
+                        {activePage === "Timer" ? <Timer /> : null}
+                    </div>
+
+                    <PhotoCredit
+                        photographer={backgrounds[backgroundImageIndex].photographer}
+                        portfolio={backgrounds[backgroundImageIndex].portfolio}
+                    />
+                </div>
+            </SettingsContent.Provider>
+            <Analytics />
+        </div>
+    )
 }
 
-export default App;
+export default App
