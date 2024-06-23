@@ -194,6 +194,7 @@ function App() {
     }
 
     // Image Loading Handler
+
     useEffect(() => {
         setImageLoaded(false)
         const img = new Image()
@@ -243,7 +244,7 @@ function App() {
                     setIsMobile,
                 }}
             >
-                <div className="flex flex-col top-0 absolute w-full h-fit">
+                <div className="flex flex-col top-0 absolute w-full h-fit z-10">
                     <div className="flex flex-row justify-end">
                         <IconContext.Provider value={{ className: "topBarButton" }}>
                             <PiQuestionLight

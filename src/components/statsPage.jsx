@@ -38,15 +38,19 @@ const StatsPage = () => {
                 backgroundColor: `${settings.themes[settings.themeIndex].timerColor}`,
             }}
         >
-            <div className="h-full flex justify-center items-center">
+            <div className="h-full flex justify-center items-center select-none">
                 <ul
                     style={{
                         color: `${settings.themes[settings.themeIndex].timerTextColor}`,
                     }}
                 >
-                    <p className="text-xl">{formattedDate} Statistics:</p>
-                    <li>Working Cycles Completed: {settings.workingCyclesCompleted.current}</li>
-                    <li>Working Minutes Completed: {settings.workingMinutesCompleted.current}</li>
+                    <p className="text-2xl ">{formattedDate} Statistics:</p>
+                    <li className="text-lg ">
+                        Working Cycles Completed: {settings.workingCyclesCompleted.current}
+                    </li>
+                    <li className="text-lg ">
+                        Working Minutes Completed: {settings.workingMinutesCompleted.current}
+                    </li>
                 </ul>
             </div>
         </div>
