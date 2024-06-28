@@ -43,32 +43,26 @@ function App() {
 
     // Local Storage States
     const [showTabTimer, setTabTimer] = useState(() => {
-        console.log("Initializing showTabTimer state")
         return checkLocalStorage("showTabTimer", true)
     })
 
     const [workingMinutes, setWorkingMinutes] = useState(() => {
-        console.log("Initializing workingMinutes state")
         return checkLocalStorage("workingMinutes", 25)
     })
 
     const [shortBreakMinutes, setShortBreakMinutes] = useState(() => {
-        console.log("Initializing shortBreakMinutes state")
         return checkLocalStorage("shortBreakMinutes", 5)
     })
 
     const [longBreakMinutes, setLongBreakMinutes] = useState(() => {
-        console.log("Initializing longBreakMinutes state")
         return checkLocalStorage("longBreakMinutes", 15)
     })
 
     const [backgroundImageIndex, setBackgroundImageIndex] = useState(() => {
-        console.log("Initializing backgroundImageIndex state")
         return checkLocalStorage("backgroundImageIndex", 0)
     })
 
     const [themeIndex, setThemeIndex] = useState(() => {
-        console.log("Initializing themeIndex state")
         return checkLocalStorage("themeIndex", 0)
     })
 
@@ -82,6 +76,9 @@ function App() {
     const fireAudio = useRef(null)
     const windAudio = useRef(null)
     const rainAudio = useRef(null)
+
+    // Reference for webworker
+    const timerWorker = useRef(null)
 
     // Initialization
     useEffect(() => {
@@ -97,9 +94,6 @@ function App() {
             timerWorker.current.terminate()
         }
     }, [])
-
-    // References
-    const timerWorker = useRef(null)
 
     // Themes
     const backgrounds = useMemo(
@@ -212,7 +206,7 @@ function App() {
     }, [])
 
     return (
-        <div className=" h-screen w-screen overscroll-none">
+        <div className=" h-screen w-screen ">
             <SettingsContent.Provider
                 value={{
                     showTabTimer,
@@ -308,7 +302,7 @@ function App() {
                 </div>
 
                 <div
-                    className={"bg-no-repeat bg-cover bg-center h-full"}
+                    className={"bg-no-repeat bg-cover bg-center h-full overscroll-none"}
                     style={{
                         backgroundImage: imageLoaded
                             ? `url(${backgrounds[backgroundImageIndex].image})`

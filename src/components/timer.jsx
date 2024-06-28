@@ -33,9 +33,6 @@ function Timer() {
                     settings.workFinishAudio.current.play()
                     settings.workingMinutesCompleted.current += settings.workingMinutes
                     settings.workingCyclesCompleted.current += 1
-                    console.log(
-                        `Working Minutes Completed for this session: ${settings.workingMinutesCompleted.current}`
-                    )
                 }
                 settings.setCycleNumber(settings.cycleNumber + 1)
             } else {
